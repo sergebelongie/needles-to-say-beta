@@ -1,64 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Needles to Say</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-        }
-
-        #gameInterface,
-        #feedbackSection {
-            margin-top: 20px;
-        }
-
-        input,
-        textarea,
-        button {
-            margin-top: 10px;
-        }
-
-        button {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
-
 <body>
-
-    <!-- Splash Screen -->
-    <div id="splashScreen">
-        <h2>Welcome to "Needles to Say"</h2>
-        <p>Given a clue, try to guess a word pair in which the second word is obtained by taking the first word and dropping the last letter. Both words must be in common use in English.</p>
-        <p>For example, for the clue "unnecessary sewing implement", the answer could be "needless needles".</p>
-        <button onclick="startGame()">Start</button>
-    </div>
-
-    <!-- Main Game Interface -->
-    <div id="gameInterface" style="display: none;">
-        <h2>Today's Clue:</h2>
-        <div id="clue">Loading...</div>
-        <input type="text" id="inputWord1" placeholder="First Word">
-        <input type="text" id="inputWord2" placeholder="Second Word">
-        <button onclick="submitGuess()">Submit Guess</button>
+    <div class="game-interface">
+        <h1>Needles to Say</h1>
+        <p id="clue">Loading clue...</p>
+        <input type="text" id="guessInput" placeholder="Your Guess" onkeydown="checkForEnter(event)">
+        <button onclick="submitGuess()">Submit</button>
         <button id="shareButton" style="display:none;" onclick="copyToClipboard()">Share Your Result</button>
     </div>
 
-    <!-- Feedback Section -->
-    <div id="feedbackSection">
-        <h3>We value your feedback!</h3>
-        <textarea id="feedbackText" rows="5" cols="30" placeholder="Your feedback..."></textarea>
-        <button onclick="submitFeedback()">Submit Feedback</button>
+    <div class="tabs">
+        <div id="rulesTab">Rules</div>
+        <div id="feedbackTab">Feedback</div>
+        <div id="aboutTab">About</div>
     </div>
 
-    <!-- Including the JavaScript -->
-    <script src="script.js"></script>
-</body>
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="toggleModal('rulesModal')">&times;</span>
+            <h2>Rules</h2>
+            <p>Given a clue, try to guess the word pair in which the second word is obtained by taking the first word and dropping the last letter. Both words must be in common use in English.</p>
+        </div>
+    </div>
 
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="toggleModal('feedbackModal')">&times;</span>
+            <h2>Feedback</h2>
+            <p>Send your feedback to: <a href="mailto:feedback@example.com">feedback@example.com</a></p>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="toggleModal('aboutModal')">&times;</span>
+            <h2>About</h2>
+            <p>Developed by [Your Name]. Special thanks to all contributors!</p>
+        </div>
+    </div>
+
+</body>
 </html>
