@@ -72,14 +72,19 @@ if (isBetaTesting) {
 }
 
 function checkGuess() {
-    const guess = guessInput.value.toLowerCase().split(" ");
-    if (guess.length === 2) {
-        if (isValidAnswer(guess)) {
-            endTime = new Date();
+    const guessInput = document.getElementById('guess-input');
+    let guess = guessInput.value.trim();
+    
+    if (guess.includes(' ') || guess.length >= correctAnswer[0].length) {
+        guess = guess.replace(',', '');  // remove comma if present
+        
+        if (correctAnswer.includes(guess)) {
             clearInterval(timerInterval);
-            displaySuccess();
+            showResult(true);
         } else {
-            incorrectMessage.textContent = "Incorrect. Try again!";
+            guessInput.value = '';
+            guessInput.placeholder = 'Try again!';
+            guessInput.classList.add('incorrect');
         }
     }
 }
