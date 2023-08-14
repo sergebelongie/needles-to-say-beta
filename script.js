@@ -60,3 +60,8 @@ document.getElementById('guess').addEventListener('keydown', function(e) {
         submitGuess();
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadPuzzleForToday();
+});
+
