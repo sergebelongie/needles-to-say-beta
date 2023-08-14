@@ -3,17 +3,18 @@ const clueElement = document.getElementById("clue");
 const guessInput = document.getElementById("guessInput");
 const submitBtn = document.getElementById("submitBtn");
 const resultElement = document.getElementById("result");
+const puzzleSelect = document.getElementById("puzzleSelect");
 
 let currentPairIndex = 0;
 let wordPairs = [];
 
-// Fetch and parse the CSV data
 async function fetchAndParseCSV() {
     const csvUrl = 'data.csv';
     const response = await fetch(csvUrl);
     const csvData = await response.text();
     
     wordPairs = Papa.parse(csvData, { header: true }).data;
+    populatePuzzleSelect();
     displayClueAndCheckGuess();
 }
 
@@ -35,13 +36,24 @@ function displayClueAndCheckGuess() {
 
             guessInput.value = "";
             submitBtn.disabled = true;
-            currentPairIndex++;
-            displayClueAndCheckGuess();
         });
     } else {
-        gameArea.innerHTML = "<p>Congratulations! You've completed the game.</p>";
+        gameArea.innerHTML = "<p>Congratulations! You've completed all puzzles.</p>";
     }
 }
 
-// Call the function to fetch and parse the CSV data
+function populatePuzzleSelect() {
+    for (let i = 0; i < wordPairs.length; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `Puzzle ${i + 1}`;
+        puzzleSelect.appendChild(option);
+    }
+
+    puzzleSelect.addEventListener("change", () => {
+        currentPairIndex = parseInt(puzzleSelect.value);
+        displayClueAndCheckGuess();
+    });
+}
+
 fetchAndParseCSV();
