@@ -2,41 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Needles to Say</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-
-<div class="container">
-    <h1>Needles to Say</h1>
-    <p>Welcome to Needles to Say! Given a clue, try to guess the word pair. Ready for today's challenge?</p>
-
-    <h3 id="dailyClue">Loading daily clue...</h3>
-
-    <input type="text" id="userGuess" placeholder="Enter your guess" onkeydown="checkForEnter(event)">
-    <button onclick="submitGuess()">Submit</button>
-
-    <div id="resultMessage"></div>
-
-    <div class="feedback" onclick="provideFeedback()">Feedback</div>
-    <div class="about" onclick="showAbout()">About</div>
-
-    <div id="socialShare" style="display:none;">
-        <p>Share your result!</p>
-        <!-- Social share logic will go here -->
+    <div class="container">
+        <h1>Needles to Say</h1>
+        <p id="clue"></p>
+        <input type="text" id="playerInput" onkeydown="checkForEnter(event)">
+        <button onclick="submitGuess()">Submit</button>
+        <p id="feedback"></p>
+        <div id="betaFeature">
+            <label for="puzzleDate">Select a date for beta testing:</label>
+            <input type="date" id="puzzleDate" name="puzzleDate" min="2023-07-30">
+            <button onclick="loadPuzzleForDate()">Load Puzzle</button>
+        </div>
+        <div id="socialShare" style="display:none;">
+            <button onclick="copyToClipboard()">Share</button>
+        </div>
+        <div id="about">
+            <h2>About</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.</p>
+        </div>
+        <div id="feedbackSection">
+            <h2>Feedback</h2>
+            <p>If you have feedback, please <a href="mailto:your_email@example.com">contact us</a>.</p>
+        </div>
     </div>
-
-    <div id="aboutSection" style="display:none;">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed consectetur ligula id risus consectetur, non ullamcorper felis vestibulum. Nullam eget fermentum justo, id bibendum dui.</p>
-    </div>
-
-    <div id="feedbackSection" style="display:none;">
-        <p>For feedback, please visit our <a href="https://github.com/sergebelongie/needles-to-say-beta/issues">GitHub repo</a> and open an issue.</p>
-    </div>
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
