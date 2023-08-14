@@ -1,107 +1,57 @@
-let startTime;
-let currentAnswers = [];
+let puzzles = [];
+let currentPuzzle = null;
+let startTime = null;
 
-window.onload = function() {
-    fetchDailyPuzzle();
-};
+// Load puzzles from data.csv
+fetch('data.csv')
+    .then(response => response.text())
+    .then(data => {
+        let lines = data.trim().split('\n');
+        for(let i = 1; i < lines.length; i++) {
+            let [clue, word1, word2] = lines[i].split(',');
+            puzzles.push({ clue, word1, word2 });
+        }
+        loadDailyPuzzle();
+    });
 
-function getDayNumberSinceReferenceDate() {
-    let referenceDate = new Date(2023, 6, 30); // 30-Jul-2023
-    let currentDate = new Date();
-    let timeDifference = currentDate - referenceDate;
-    let dayDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    return dayDifference;
-}
-
-function startGame() {
-    document.getElementById('splashScreen').style.display = 'none';
-    document.getElementById('gameInterface').style.display = 'block';
+function loadDailyPuzzle() {
+    let dayOfYear = Math.floor((new Date() - new Date('2023-07-30')) / (1000 * 60 * 60 * 24)) % puzzles.length;
+    currentPuzzle = puzzles[dayOfYear];
+    document.getElementById('dailyClue').textContent = currentPuzzle.clue;
     startTime = new Date();
 }
 
-function fetchDailyPuzzle() {
-    let dayNumber = getDayNumberSinceReferenceDate();
-    let totalEntries = 47;
-    let puzzleIndex = dayNumber % totalEntries;
-
-    fetch('data.csv')
-        .then(response => response.text())
-        .then(data => {
-            console.log("Raw CSV Data:", data); // This will log the entire CSV
-
-            let rows = data.split("\n");
-            let selectedRow = rows[puzzleIndex + 1];
-            console.log("Selected Row:", selectedRow); // This will log the row of the day's puzzle
-
-            let columns = selectedRow.split(",");
-
-            let clue = columns[0];
-            document.getElementById('clue').innerText = clue;
-
-            currentAnswers = [
-                columns[1].split("|"),
-                columns[2].split("|")
-            ];
-            console.log("Parsed Answers:", currentAnswers); // This will log the parsed answers for the day's puzzle
-        })
-        .catch(error => {
-            console.error("Error fetching the puzzle data: ", error);
-        });
-}
-
-
 function submitGuess() {
-    let userInputWord1 = document.getElementById('inputWord1').value.toLowerCase().trim();
-    let userInputWord2 = document.getElementById('inputWord2').value.toLowerCase().trim();
+    let guess = document.getElementById('userGuess').value.toLowerCase();
+    let [guessedWord1, guessedWord2] = guess.split(' ');
 
-    if (currentAnswers[0].includes(userInputWord1) && currentAnswers[1].includes(userInputWord2)) {
-    let endTime = new Date();
-    let timeTaken = (endTime - startTime) / 1000;
-    let minutes = Math.floor(timeTaken / 60);
-    let seconds = Math.floor(timeTaken % 60);
-    alert(`Correct! It took you ${minutes}m ${seconds}s.`);
-    document.getElementById('shareButton').style.display = 'block'; // Show the share button
-
+    if (guessedWord1 === currentPuzzle.word1.toLowerCase() && guessedWord2 === currentPuzzle.word2.toLowerCase()) {
+        let timeTaken = Math.round((new Date() - startTime) / 1000);
+        let minutes = Math.floor(timeTaken / 60);
+        let seconds = timeTaken % 60;
+        document.getElementById('resultMessage').textContent = `Correct! Time taken: ${minutes}:${seconds}`;
+        // Display social share
+        document.getElementById('socialShare').style.display = 'block';
     } else {
-        alert('Incorrect. Try again.');
+        document.getElementById('resultMessage').textContent = 'Try again!';
     }
-}
-
-function submitFeedback() {
-    let feedbackText = document.getElementById('feedbackText').value;
-    if (feedbackText.trim() === '') {
-        alert('Please provide feedback before submitting.');
-    } else {
-        alert('Thank you for your feedback!');
-        // Send the feedback to a server or store it, as needed
-    }
-}
-
-function copyToClipboard() {
-    let dayNumber = getDayNumberSinceReferenceDate();
-    let endTime = new Date();
-    let timeTaken = (endTime - startTime) / 1000;
-    let minutes = Math.floor(timeTaken / 60);
-    let seconds = Math.floor(timeTaken % 60);
-    let shareText = `Needles to Say #${dayNumber} ${minutes}m:${seconds}s`;
-
-    let textArea = document.createElement('textarea');
-    textArea.value = shareText;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-
-    alert('Result copied to clipboard! Share it on your favorite platform.');
 }
 
 function checkForEnter(event) {
-    // Number 13 is the "Enter" key on the keyboard
-    if (event.keyCode === 13) {
-        // Cancel the default action (form submission, page refresh) if needed
-        event.preventDefault();
-        // Trigger the button click event
+    if (event.key === 'Enter') {
         submitGuess();
     }
 }
 
+function provideFeedback() {
+    window.location.href = 'https://github.com/sergebelongie/needles-to-say-beta/issues';
+}
+
+function showAbout() {
+    let aboutSection = document.getElementById('aboutSection');
+    if (aboutSection.style.display === 'none') {
+        aboutSection.style.display = 'block';
+    } else {
+        aboutSection.style.display = 'none';
+    }
+}
