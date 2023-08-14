@@ -25,10 +25,20 @@ function loadPuzzle(puzzleId) {
 
 function submitGuess() {
     let guess = document.getElementById("guess").value.toLowerCase();
-    let today = new Date();
-    let start = new Date('2023-07-30');
-    let difference = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    let currentPuzzle = puzzles[difference];
+    
+    let puzzleId;
+    let selectedDate = document.getElementById("override-date").value;
+    if (selectedDate) {
+        let dateSelected = new Date(selectedDate);
+        let start = new Date('2023-07-30');
+        puzzleId = Math.floor((dateSelected - start) / (1000 * 60 * 60 * 24));
+    } else {
+        let today = new Date();
+        let start = new Date('2023-07-30');
+        puzzleId = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    }
+    
+    let currentPuzzle = puzzles[puzzleId];
 
     if (currentPuzzle && (guess === currentPuzzle.word1.toLowerCase() || guess === currentPuzzle.word2.toLowerCase())) {
         document.getElementById('result').textContent = "Correct!";
@@ -37,6 +47,7 @@ function submitGuess() {
         document.getElementById('result').textContent = "Try again!";
     }
 }
+
 
 function showSocialShare() {
     let socialShareDiv = document.getElementById('social-share');
