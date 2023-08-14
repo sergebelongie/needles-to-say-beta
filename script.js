@@ -1,82 +1,61 @@
-let puzzles = [];
+let currentPuzzle = {};
 
-function loadPuzzleForToday() {
-    let today = new Date();
-    let start = new Date('2023-07-30');
-    let difference = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    loadPuzzle(difference);
+document.addEventListener("DOMContentLoaded", function() {
+    loadPuzzleForToday();
+});
+
+async function fetchData() {
+    const response = await fetch("data.csv");
+    const data = await response.text();
+    const puzzles = data.split("\n").map(row => {
+        const [date, clue, word1, word2] = row.split(",");
+        return { date, clue, word1, word2 };
+    });
+    return puzzles;
 }
 
-function loadPuzzleForGivenDate() {
-    let selectedDate = new Date(document.getElementById("override-date").value);
-    let start = new Date('2023-07-30');
-    let difference = Math.floor((selectedDate - start) / (1000 * 60 * 60 * 24));
-    loadPuzzle(difference);
+async function loadPuzzleForToday() {
+    const puzzles = await fetchData();
+    const currentDate = new Date().toISOString().split("T")[0];
+    currentPuzzle = puzzles.find(puzzle => puzzle.date === currentDate);
+    displayPuzzle(currentPuzzle);
 }
 
-function loadPuzzle(puzzleId) {
-    let puzzleEntry = puzzles[puzzleId];
-    if (puzzleEntry) {
-        document.getElementById('clue').textContent = puzzleEntry.clue;
-    } else {
-        document.getElementById('clue').textContent = "No puzzle available for this day.";
-    }
+function displayPuzzle(puzzle) {
+    document.getElementById("clue").textContent = puzzle.clue;
+}
+
+async function loadPuzzleForGivenDate() {
+    const puzzles = await fetchData();
+    const selectedDate = document.getElementById("override-date").value;
+    currentPuzzle = puzzles.find(puzzle => puzzle.date === selectedDate);
+    displayPuzzle(currentPuzzle);
 }
 
 function submitGuess() {
-    let guess = document.getElementById("guess").value.toLowerCase();
-    console.log("User's Guess:", guess); // Debug
-    
-    let puzzleId;
-    let selectedDate = document.getElementById("override-date").value;
-    if (selectedDate) {
-        let dateSelected = new Date(selectedDate);
-        let start = new Date('2023-07-30');
-        puzzleId = Math.floor((dateSelected - start) / (1000 * 60 * 60 * 24));
-    } else {
-        let today = new Date();
-        let start = new Date('2023-07-30');
-        puzzleId = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    }
-    
-    let currentPuzzle = puzzles[puzzleId];
-    console.log("Selected Puzzle:", currentPuzzle); // Debug
+    let userGuess = document.getElementById("guess").value.trim();
+    console.log("User's Guess:", userGuess);
+    console.log("Selected Puzzle:", currentPuzzle);
 
-    if (currentPuzzle && (guess === currentPuzzle.word1.toLowerCase() || guess === currentPuzzle.word2.toLowerCase())) {
-        document.getElementById('result').textContent = "Correct!";
+    if (userGuess.toLowerCase() === (currentPuzzle.word1 + ' ' + currentPuzzle.word2).toLowerCase()) {
+        showCorrectMessage();
         showSocialShare();
     } else {
-        console.log("Comparison Failed:", guess, currentPuzzle.word1.toLowerCase(), currentPuzzle.word2.toLowerCase()); // Debug
-        document.getElementById('result').textContent = "Try again!";
+        document.getElementById("result").textContent = "Try again!";
     }
 }
 
-
-
-function showSocialShare() {
-    let socialShareDiv = document.getElementById('social-share');
-    let shareText = `I solved today's puzzle on Needles to Say! #NeedlesToSay`;
-    document.getElementById('share-text').textContent = shareText;
-    socialShareDiv.style.display = 'block';
+function showCorrectMessage() {
+    document.getElementById("result").textContent = "Correct!";
 }
 
-// Load puzzles data on page load
-fetch('data.csv')
-    .then(response => response.text())
-    .then(data => {
-        let csvLines = data.split('\n');
-        csvLines.shift(); // remove headers
-        csvLines.forEach(line => {
-            let [clue, word1, word2] = line.split(',');
-            puzzles.push({ clue, word1, word2 });
-        });
-        loadPuzzleForToday();
-    });
+function showSocialShare() {
+    document.getElementById("social-share").style.display = "block";
+    document.getElementById("share-text").textContent = `I solved today's puzzle on Needles to Say! #NeedlesToSay`;
+}
 
-// Listen for Enter key press on guess input field
 document.getElementById("guess").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
-        event.preventDefault();
         submitGuess();
     }
 });
