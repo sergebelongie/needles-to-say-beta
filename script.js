@@ -73,7 +73,15 @@ if (isBetaTesting) {
 
 function checkGuess() {
     const guessInput = document.getElementById('guess-input');
+    const submitButton = document.getElementById('submit-button');
+    
     let guess = guessInput.value.trim();
+    
+    if (submitButton.classList.contains('disabled')) {
+        return;
+    }
+
+    submitButton.classList.add('disabled');
     
     if (guess.includes(' ') || guess.length >= correctAnswer[0].length) {
         guess = guess.replace(',', '');  // remove comma if present
@@ -85,8 +93,14 @@ function checkGuess() {
             guessInput.value = '';
             guessInput.placeholder = 'Try again!';
             guessInput.classList.add('incorrect');
+            setTimeout(() => {
+                guessInput.placeholder = 'Enter your guess...';
+                guessInput.classList.remove('incorrect');
+            }, 1000);
         }
     }
+    
+    submitButton.classList.remove('disabled');
 }
 
 function isValidAnswer(guess) {
