@@ -35,11 +35,15 @@ function parseCSV(data) {
     const rows = data.split('\n').slice(1);
     return rows.map(row => {
         const [clue, word1, word2] = row.split(',');
+        if (!clue || !word1 || !word2) {
+            console.error("Malformed row:", row);
+            return null;
+        }
         return {
             clue,
             answers: word1.split('|').map((w1, index) => [w1, word2.split('|')[index]])
         };
-    });
+    }).filter(Boolean);
 }
 
 function loadDailyPuzzle() {
