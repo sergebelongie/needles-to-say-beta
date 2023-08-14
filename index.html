@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Needles to Say</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="gameScreen">
+    <!-- Override Section (For Beta Testing) -->
+    <div id="overrideSection" style="display: block;">
+        <label for="overrideInput">Override Date (Beta Testing):</label>
+        <input type="text" id="overrideInput" placeholder="YYYY-MM-DD">
+        <button id="loadPuzzleBtn">Load Puzzle</button>
+    </div>
+
+    <!-- Clue Display -->
+    <div id="clueDisplay"></div>
+
+    <!-- Guess Input -->
+    <input type="text" id="guessInput" placeholder="Enter your guess...">
+
+    <!-- Timer Display -->
+    <div id="timerDisplay">Time: 00:00</div>
+
+    <!-- Success Message -->
+    <div id="successMessage" style="display: none;">
+        <p>Congratulations! You've guessed correctly.</p>
+        <!-- Social Sharing Options -->
+        <button id="copyShareBtn">Copy Shareable Text</button>
+        <a href="#" id="tweetShareLink" target="_blank">Share on Twitter</a>
+    </div>
+
+    <!-- Incorrect Guess Feedback -->
+    <div id="incorrectMessage" style="color: red;"></div>
+
+    <!-- Give Up Button -->
+    <button id="giveUpBtn">Give Up</button>
+
+    <!-- Solution Message -->
+    <div id="solutionMessage" style="display: none;"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
