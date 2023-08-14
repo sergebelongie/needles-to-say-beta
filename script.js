@@ -5,6 +5,17 @@ const submitBtn = document.getElementById("submitBtn");
 const resultElement = document.getElementById("result");
 
 let currentPairIndex = 0;
+let wordPairs = [];
+
+// Fetch and parse the CSV data
+async function fetchAndParseCSV() {
+    const csvUrl = 'data.csv';
+    const response = await fetch(csvUrl);
+    const csvData = await response.text();
+    
+    wordPairs = Papa.parse(csvData, { header: true }).data;
+    displayClueAndCheckGuess();
+}
 
 function displayClueAndCheckGuess() {
     if (currentPairIndex < wordPairs.length) {
@@ -32,10 +43,5 @@ function displayClueAndCheckGuess() {
     }
 }
 
-// Replace this with your actual word pairs data
-const wordPairs = [
-    { clue: "unnecessary sewing implement", answer: "needless needles" },
-    { clue: "Five o’clock shadow grizzly", answer: "beard bear" }
-];
-
-displayClueAndCheckGuess();
+// Call the function to fetch and parse the CSV data
+fetchAndParseCSV();
