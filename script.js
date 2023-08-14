@@ -1,38 +1,47 @@
+// Define your puzzles data
 let puzzles = [];
-let currentPuzzle = null;
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    fetch('data.csv')
-        .then(response => response.text())
-        .then(data => {
-            const csvLines = data.trim().split("\n");
-            csvLines.shift();  // Remove header
-            csvLines.forEach(line => {
-                const [clue, word1, word2] = line.split(',');
-                puzzles.push({ clue, word1, word2 });
-            });
-            loadPuzzleForToday();
+// Load puzzles data on page load
+fetch('data.csv')
+    .then(response => response.text())
+    .then(data => {
+        let csvLines = data.split('\n');
+        csvLines.shift(); // remove headers
+        csvLines.forEach(line => {
+            let [clue, word1, word2] = line.split(',');
+            puzzles.push({ clue, word1, word2 });
         });
-});
+        loadPuzzleForToday();
+    });
 
-document.addEventListener("DOMContentLoaded", function() {
-    loadPuzzleForToday();
-});
- {
-    const today = new Date();
-    const startDay = new Date(2023, 6, 30);  // Month is 0-indexed
-    const daysDiff = Math.floor((today - startDay) / (1000 * 60 * 60 * 24)) % puzzles.length;
-    currentPuzzle = puzzles[daysDiff];
-    document.getElementById('clue').textContent = currentPuzzle.clue;
+function loadPuzzleForToday() {
+    let today = new Date();
+    let start = new Date('2023-07-30');
+    let difference = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    loadPuzzle(difference);
 }
 
 function loadPuzzleForGivenDate() {
-    const selectedDate = new Date(document.getElementById('override-date').value);
-    const startDay = new Date(2023, 6, 30);  // Month is 0-indexed
-    const daysDiff = Math.floor((selectedDate - startDay) / (1000 * 60 * 60 * 24)) % puzzles.length;
-    currentPuzzle = puzzles[daysDiff];
-    document.getElementById('clue').textContent = currentPuzzle.clue;
+    let selectedDate = new Date(document.getElementById("override-date").value);
+    let start = new Date('2023-07-30');
+    let difference = Math.floor((selectedDate - start) / (1000 * 60 * 60 * 24));
+    loadPuzzle(difference);
 }
+
+function loadPuzzle(puzzleId) {
+    if (puzzles[puzzleId]) {
+        document.getElementById('clue').textContent = puzzles[puzzleId].clue;
+    } else {
+        document.getElementById('clue').textContent = "No puzzle available for this day.";
+    }
+}
+
+function submitGuess() {
+    // Your submit logic here
+}
+
+// Additional code for other functionalities...
+
 
 function submitGuess() {
     const guessedWordPair = document.getElementById('guess').value.toLowerCase().trim();
