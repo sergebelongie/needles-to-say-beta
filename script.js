@@ -19,7 +19,7 @@ const solutionMessage = document.getElementById('solutionMessage');
 const isBetaTesting = true;
 
 window.onload = () => {
-    fetch('data.csv')
+    fetch('./data.csv')
         .then(response => response.text())
         .then(data => {
             puzzlesData = parseCSV(data);
