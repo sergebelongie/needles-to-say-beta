@@ -7,13 +7,14 @@ let correctAnswer = null;
 function parseCSV(data) {
     const rows = data.split('\n').filter(row => row.trim() !== '' && row.includes(','));
     return rows.map(row => {
-        const [clue, word1, word2] = row.split(',');
-        if (!clue || !word1 || !word2) {
+        const [date, clue, word1, word2] = row.split(',');
+        if (!date || !clue || !word1 || !word2) {
             console.error("Malformed row:", row);
             return null;
         }
         try {
             return {
+                date,
                 clue,
                 answers: word1.split('|').map((w1, index) => [w1, word2.split('|')[index]])
             };
@@ -40,35 +41,51 @@ function loadPuzzles() {
 function startGame() {
     currentPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
     correctAnswer = currentPuzzle.answers[0][0] + " " + currentPuzzle.answers[0][1];
-    
+
     document.getElementById('clue').textContent = currentPuzzle.clue;
     document.getElementById('guess-input').value = '';
     document.getElementById('result').textContent = '';
     document.getElementById('submit-button').classList.remove('disabled');
-    
+
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
 }
 
 // Function to update the timer display
 function updateTimer() {
     const timerElement = document.getElementById('timer');
-    let seconds = parseInt(timerElement.textContent.split(':')[1]);
+    let [minutes, seconds] = timerElement.textContent.split(':').map(Number);
     seconds++;
-    if (seconds < 10) {
-        seconds = '0' + seconds;
+    if (seconds === 60) {
+        seconds = 0;
+        minutes++;
     }
-    timerElement.textContent = '00:' + seconds;
+    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 // Function to check the user's guess
 function checkGuess() {
-    // ... (rest of the checkGuess function)
+    const guessInput = document.getElementById('guess-input');
+    const guess = guessInput.value.trim().toLowerCase();
+    if (guess === correctAnswer.toLowerCase()) {
+        showResult(true);
+    }
 }
 
 // Function to show the result
 function showResult(isCorrect) {
-    // ... (rest of the showResult function)
+    const resultElement = document.getElementById('result');
+    const guessInput = document.getElementById('guess-input');
+    clearInterval(timerInterval);
+    if (isCorrect) {
+        resultElement.textContent = "Correct!";
+        guessInput.disabled = true;
+        guessInput.value = correctAnswer;
+        document.getElementById('submit-button').classList.add('disabled');
+    } else {
+        resultElement.textContent = "Incorrect. Try again!";
+    }
 }
 
 // Function to override the daily challenge
@@ -88,5 +105,4 @@ function overrideChallenge() {
 
 window.onload = function () {
     loadPuzzles();
-    // ... (rest of the window.onload function)
 }
