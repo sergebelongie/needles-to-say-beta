@@ -1,29 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Needles to Say</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #gameInterface,
+        #feedbackSection {
+            margin-top: 20px;
+        }
+
+        input,
+        textarea,
+        button {
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="game-container">
-        <div class="game-header">
-            <h1>Needles to Say</h1>
-            <p>Guess the word pair!</p>
-        </div>
-        <div class="game-content">
-            <p class="clue" id="clue"></p>
-            <input id="guess-input" type="text" placeholder="Enter your guess..." oninput="checkGuess()">
-            <button id="submit-button" onclick="checkGuess()">Submit</button>
-            <button id="load-puzzle-button" onclick="startGame()">Load Puzzle</button>
-            <button id="give-up-button" onclick="showResult(false)">Give Up</button>
-            <div class="timer" id="timer">00:00</div>
-            <p class="result" id="result"></p>
-            <button id="override-button" onclick="overrideChallenge()">Override Daily Challenge</button>
-            <input id="override-date" type="date" placeholder="YYYY-MM-DD">
-        </div>
+
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <h2>Welcome to "Needles to Say"</h2>
+        <p>Given a clue, try to guess a word pair in which the second word is obtained by taking the first word and dropping the last letter. Both words must be in common use in English.</p>
+        <p>For example, for the clue "unnecessary sewing implement", the answer could be "needless needles".</p>
+        <button onclick="startGame()">Start</button>
     </div>
+
+    <!-- Main Game Interface -->
+    <div id="gameInterface" style="display: none;">
+        <h2>Today's Clue:</h2>
+        <div id="clue">Loading...</div>
+        <input type="text" id="inputWord1" placeholder="First Word">
+        <input type="text" id="inputWord2" placeholder="Second Word">
+        <button onclick="submitGuess()">Submit Guess</button>
+    </div>
+
+    <!-- Feedback Section -->
+    <div id="feedbackSection">
+        <h3>We value your feedback!</h3>
+        <textarea id="feedbackText" rows="5" cols="30" placeholder="Your feedback..."></textarea>
+        <button onclick="submitFeedback()">Submit Feedback</button>
+    </div>
+
+    <!-- Including the JavaScript -->
     <script src="script.js"></script>
 </body>
+
 </html>
