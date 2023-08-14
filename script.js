@@ -25,6 +25,7 @@ function loadPuzzle(puzzleId) {
 
 function submitGuess() {
     let guess = document.getElementById("guess").value.toLowerCase();
+    console.log("User's Guess:", guess); // Debug
     
     let puzzleId;
     let selectedDate = document.getElementById("override-date").value;
@@ -39,14 +40,17 @@ function submitGuess() {
     }
     
     let currentPuzzle = puzzles[puzzleId];
+    console.log("Selected Puzzle:", currentPuzzle); // Debug
 
     if (currentPuzzle && (guess === currentPuzzle.word1.toLowerCase() || guess === currentPuzzle.word2.toLowerCase())) {
         document.getElementById('result').textContent = "Correct!";
         showSocialShare();
     } else {
+        console.log("Comparison Failed:", guess, currentPuzzle.word1.toLowerCase(), currentPuzzle.word2.toLowerCase()); // Debug
         document.getElementById('result').textContent = "Try again!";
     }
 }
+
 
 
 function showSocialShare() {
