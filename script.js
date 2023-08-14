@@ -23,6 +23,7 @@ window.onload = () => {
         .then(response => response.text())
         .then(data => {
             puzzlesData = parseCSV(data);
+            console.log(puzzlesData);
             loadDailyPuzzle();
         })
         .catch(error => {
