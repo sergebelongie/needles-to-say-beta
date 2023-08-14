@@ -15,7 +15,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
 });
 
-function loadPuzzleForToday() {
+document.addEventListener("DOMContentLoaded", function() {
+    loadPuzzleForToday();
+});
+ {
     const today = new Date();
     const startDay = new Date(2023, 6, 30);  // Month is 0-indexed
     const daysDiff = Math.floor((today - startDay) / (1000 * 60 * 60 * 24)) % puzzles.length;
