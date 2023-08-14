@@ -15,12 +15,12 @@ async function fetchAndParseCSV() {
     
     wordPairs = Papa.parse(csvData, { header: true }).data;
     populatePuzzleSelect();
-    displayClueAndCheckGuess();
+    displaySelectedPuzzle(currentPairIndex);
 }
 
-function displayClueAndCheckGuess() {
-    if (currentPairIndex < wordPairs.length) {
-        const currentPair = wordPairs[currentPairIndex];
+function displaySelectedPuzzle(index) {
+    if (index < wordPairs.length) {
+        const currentPair = wordPairs[index];
         clueElement.textContent = `Clue: ${currentPair.clue}`;
         
         submitBtn.disabled = false;
@@ -52,7 +52,7 @@ function populatePuzzleSelect() {
 
     puzzleSelect.addEventListener("change", () => {
         currentPairIndex = parseInt(puzzleSelect.value);
-        displayClueAndCheckGuess();
+        displaySelectedPuzzle(currentPairIndex);
     });
 }
 
