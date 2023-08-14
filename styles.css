@@ -1,72 +1,33 @@
-let puzzles = [];
-let currentPuzzle = null;
-let startTime = null;
-let endTime = null;
-
-fetch('data.csv')
-    .then(response => response.text())
-    .then(data => {
-        let rows = data.split('\n').slice(1); // Removing header
-        rows.forEach(row => {
-            let [clue, word1, word2] = row.split(',');
-            puzzles.push({clue, word1, word2});
-        });
-
-        // Load today's puzzle by default
-        loadPuzzleForToday();
-    });
-
-function loadPuzzleForToday() {
-    let dayNumber = getDayNumberSinceStart(new Date());
-    currentPuzzle = puzzles[dayNumber % puzzles.length];
-    document.getElementById('clue').textContent = currentPuzzle.clue;
-    startTime = new Date();
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    padding-top: 50px;
 }
 
-function loadPuzzleForDate() {
-    let selectedDate = new Date(document.getElementById('puzzleDate').value);
-    let dayNumber = getDayNumberSinceStart(selectedDate);
-    currentPuzzle = puzzles[dayNumber % puzzles.length];
-    document.getElementById('clue').textContent = currentPuzzle.clue;
+#game {
+    width: 70%;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-function getDayNumberSinceStart(date) {
-    const start = new Date('2023-07-30');
-    const diffTime = Math.abs(date - start);
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+h1 {
+    color: #2c3e50;
 }
 
-function submitGuess() {
-    endTime = new Date();
-    let playerGuess = document.getElementById('playerInput').value.trim().toLowerCase();
-
-    if (playerGuess === (currentPuzzle.word1 + " " + currentPuzzle.word2).toLowerCase()) {
-        document.getElementById('feedback').textContent = "Correct!";
-        document.getElementById('socialShare').style.display = "block";
-    } else {
-        document.getElementById('feedback').textContent = "Try again!";
-    }
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-function checkForEnter(event) {
-    if (event.keyCode === 13) {
-        submitGuess();
-    }
-}
-
-function copyToClipboard() {
-    const elapsedSeconds = Math.floor((endTime - startTime) / 1000);
-    const mins = Math.floor(elapsedSeconds / 60);
-    const secs = elapsedSeconds % 60;
-    const timeStr = `${mins}:${secs.toString().padStart(2, '0')}`;
-    const dayNumber = getDayNumberSinceStart(new Date());
-    const text = `Needles to Say #${dayNumber} ${timeStr}`;
-
-    const tempInput = document.createElement('textarea');
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-    alert('Text copied to clipboard!');
+#beta-features {
+    margin-top: 20px;
 }
