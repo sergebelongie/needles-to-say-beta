@@ -1,62 +1,70 @@
-// Function to get the day number since 30-Jul-2023
+let startTime;
+let currentAnswers = [];
+
+window.onload = function() {
+    fetchDailyPuzzle();
+};
+
 function getDayNumberSinceReferenceDate() {
-    const referenceDate = new Date('2023-07-30');
-    const currentDate = new Date();
-    const differenceInTime = currentDate - referenceDate;
-    const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
-    return differenceInDays;
+    let referenceDate = new Date(2023, 6, 30); // 30-Jul-2023
+    let currentDate = new Date();
+    let timeDifference = currentDate - referenceDate;
+    let dayDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    return dayDifference;
 }
 
-// Function to start the game
 function startGame() {
     document.getElementById('splashScreen').style.display = 'none';
     document.getElementById('gameInterface').style.display = 'block';
-    fetchDailyPuzzle();
+    startTime = new Date();
 }
 
-// Function to fetch the daily puzzle from data.csv
 function fetchDailyPuzzle() {
     let dayNumber = getDayNumberSinceReferenceDate();
     let totalEntries = 47;
     let puzzleIndex = dayNumber % totalEntries;
 
-    // Using the Fetch API to get the CSV data
     fetch('data.csv')
         .then(response => response.text())
         .then(data => {
-            let rows = data.split("\n"); // Splitting data into rows
-            let selectedRow = rows[puzzleIndex + 1]; // +1 considering the header row
-            let columns = selectedRow.split(","); // Splitting row into columns
+            let rows = data.split("\n");
+            let selectedRow = rows[puzzleIndex + 1];
+            let columns = selectedRow.split(",");
 
             let clue = columns[0];
             document.getElementById('clue').innerText = clue;
 
-            // If needed, you can also extract the possible answers here
-            // For simplicity, we're just fetching the clue for now
+            currentAnswers = [
+                columns[1].split("|"),
+                columns[2].split("|")
+            ];
         })
         .catch(error => {
             console.error("Error fetching the puzzle data: ", error);
         });
 }
 
-// Function to submit the guess and check it
 function submitGuess() {
-    let userInputWord1 = document.getElementById('inputWord1').value.toLowerCase();
-    let userInputWord2 = document.getElementById('inputWord2').value.toLowerCase();
+    let userInputWord1 = document.getElementById('inputWord1').value.toLowerCase().trim();
+    let userInputWord2 = document.getElementById('inputWord2').value.toLowerCase().trim();
 
-    // Logic to check the user's guess against the solution
-    // For simplicity, let's assume a dummy check for now
-    if (userInputWord1 === "dummy1" && userInputWord2 === "dummy2") {
-        alert('Correct!');
+    if (currentAnswers[0].includes(userInputWord1) && currentAnswers[1].includes(userInputWord2)) {
+        let endTime = new Date();
+        let timeTaken = (endTime - startTime) / 1000;
+        let minutes = Math.floor(timeTaken / 60);
+        let seconds = Math.floor(timeTaken % 60);
+        alert(`Correct! It took you ${minutes}m ${seconds}s.`);
     } else {
         alert('Incorrect. Try again.');
     }
 }
 
-// Function to submit feedback
 function submitFeedback() {
     let feedbackText = document.getElementById('feedbackText').value;
-
-    // Logic to handle the feedback submission. This might involve sending it to a server or storing it somewhere.
-    alert('Thank you for your feedback!');
+    if (feedbackText.trim() === '') {
+        alert('Please provide feedback before submitting.');
+    } else {
+        alert('Thank you for your feedback!');
+        // Send the feedback to a server or store it, as needed
+    }
 }
