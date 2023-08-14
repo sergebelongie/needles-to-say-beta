@@ -1,76 +1,44 @@
-let puzzlesData = [];
-let currentClue;
-let currentAnswer;
-let startTime = new Date();
-let endTime;
+let puzzles = [];
+let currentPuzzle = null;
+let timerInterval = null;
+let correctAnswer = null;
 
-const clueDisplay = document.getElementById('clueDisplay');
-const timerDisplay = document.getElementById('timerDisplay');
-const successMessage = document.getElementById('successMessage');
-const guessInput = document.getElementById('guessInput');
-const copyShareBtn = document.getElementById('copyShareBtn');
-const tweetShareLink = document.getElementById('tweetShareLink');
-const overrideInput = document.getElementById('overrideInput');
-const loadPuzzleBtn = document.getElementById('loadPuzzleBtn');
-const incorrectMessage = document.getElementById('incorrectMessage');
-const giveUpBtn = document.getElementById('giveUpBtn');
-const solutionMessage = document.getElementById('solutionMessage');
-
-const isBetaTesting = true;
-
-window.onload = () => {
-    fetch('./data.csv')
-        .then(response => response.text())
-        .then(data => {
-            puzzlesData = parseCSV(data);
-            console.log(puzzlesData);
-            loadDailyPuzzle();
-        })
-        .catch(error => {
-            console.error("There was an error loading the CSV data:", error);
-        });
-};
-
+// Function to parse CSV data
 function parseCSV(data) {
-
     const rows = data.split('\n').filter(row => row.trim() !== '' && row.includes(','));
-return rows.map(row => {
-    const [clue, word1, word2] = row.split(',');
-    if (!clue || !word1 || !word2) {
-        console.error("Malformed row:", row);
-        return null;
-    }
-    try {
-        return {
-            clue,
-            answers: word1.split('|').map((w1, index) => [w1, word2.split('|')[index]])
-        };
-    } catch (e) {
-        console.error("Error parsing row:", row, "Error:", e);
-        return null;
-    }
+    return rows.map(row => {
+        const [clue, word1, word2] = row.split(',');
+        if (!clue || !word1 || !word2) {
+            console.error("Malformed row:", row);
+            return null;
+        }
+        try {
+            return {
+                clue,
+                answers: word1.split('|').map((w1, index) => [w1, word2.split('|')[index]])
+            };
+        } catch (e) {
+            console.error("Error parsing row:", row, "Error:", e);
+            return null;
+        }
     }).filter(Boolean);
 }
 
-function loadDailyPuzzle() {
-    const dailyPuzzle = getDailyPuzzle();
-    currentClue = dailyPuzzle.clue;
-    currentAnswer = dailyPuzzle.answers;
-    clueDisplay.textContent = currentClue;
+// Function to start a new game
+function startGame() {
+    currentPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+    correctAnswer = currentPuzzle.answers[0][0] + " " + currentPuzzle.answers[0][1];
+    
+    document.getElementById('clue').textContent = currentPuzzle.clue;
+    document.getElementById('guess-input').value = '';
+    document.getElementById('result').textContent = '';
+    document.getElementById('submit-button').classList.remove('disabled');
+    
+    clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimer, 1000);
 }
 
-function getDailyPuzzle(date = new Date()) {
-    const dayOfYear = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    return puzzlesData[dayOfYear % puzzlesData.length];
-}
-
-guessInput.addEventListener('input', checkGuess);
-copyShareBtn.addEventListener('click', copyToClipboard);
-
-if (isBetaTesting) {
-    loadPuzzleBtn.addEventListener('click', loadOverridePuzzle);
-}
-
+// Function to check the user's guess
 function checkGuess() {
     const guessInput = document.getElementById('guess-input');
     const submitButton = document.getElementById('submit-button');
@@ -83,7 +51,7 @@ function checkGuess() {
 
     submitButton.classList.add('disabled');
     
-    if (guess.includes(' ') || guess.length >= correctAnswer[0].length) {
+    if (guess.includes(' ') || guess.length >= correctAnswer.length) {
         guess = guess.replace(',', '');  // remove comma if present
         
         if (correctAnswer.includes(guess)) {
@@ -103,62 +71,9 @@ function checkGuess() {
     submitButton.classList.remove('disabled');
 }
 
-function isValidAnswer(guess) {
-    return currentAnswer.some(answerPair => 
-        guess[0] === answerPair[0].toLowerCase() && guess[1] === answerPair[1].toLowerCase()
-    );
-}
+// ... other functions
 
-function displaySuccess() {
-    const timeTaken = Math.floor((endTime - startTime) / 1000);
-    const minutes = Math.floor(timeTaken / 60);
-    const seconds = timeTaken % 60;
-    successMessage.style.display = 'block';
-    timerDisplay.textContent = `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split('T')[0];
-    const shareText = `Needles to Say ${formattedDate} ${minutes}:${seconds}`;
-    tweetShareLink.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-}
-
-function copyToClipboard() {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split('T')[0];
-    const timeTaken = timerDisplay.textContent.split(": ")[1];
-    const shareText = `Needles to Say ${formattedDate} ${timeTaken}`;
-    navigator.clipboard.writeText(shareText);
-}
-
-function loadOverridePuzzle() {
-    const overrideDate = new Date(overrideInput.value);
-    if (isValidDate(overrideDate)) {
-        const overridePuzzle = getDailyPuzzle(overrideDate);
-        currentClue = overridePuzzle.clue;
-        currentAnswer = overridePuzzle.answers;
-        clueDisplay.textContent = currentClue;
-    } else {
-        alert("Please enter a valid date in the format YYYY-MM-DD.");
-    }
-}
-
-function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
-}
-
-const timerInterval = setInterval(() => {
-    const currentTime = new Date();
-    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
-    const minutes = Math.floor(elapsedTime / 60);
-    const seconds = elapsedTime % 60;
-    timerDisplay.textContent = `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}, 1000);
-
-giveUpBtn.addEventListener('click', revealSolution);
-
-function revealSolution() {
-    clearInterval(timerInterval);
-    const onePossibleAnswer = `${currentAnswer[0][0]} ${currentAnswer[0][1]}`;
-    solutionMessage.textContent = `One possible answer is: ${onePossibleAnswer}`;
-    solutionMessage.style.display = 'block';
+window.onload = function () {
+    loadPuzzles();
+    // ... rest of the window.onload function
 }
