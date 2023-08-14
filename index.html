@@ -5,31 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Needles to Say</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Needles to Say</h1>
+
+<div id="game">
+    <h1>Needles to Say</h1>
+
+    <div id="clue-container">
         <p id="clue"></p>
-        <input type="text" id="playerInput" onkeydown="checkForEnter(event)">
-        <button onclick="submitGuess()">Submit</button>
-        <p id="feedback"></p>
-        <div id="betaFeature">
-            <label for="puzzleDate">Select a date for beta testing:</label>
-            <input type="date" id="puzzleDate" name="puzzleDate" min="2023-07-30">
-            <button onclick="loadPuzzleForDate()">Load Puzzle</button>
-        </div>
-        <div id="socialShare" style="display:none;">
-            <button onclick="copyToClipboard()">Share</button>
-        </div>
-        <div id="about">
-            <h2>About</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.</p>
-        </div>
-        <div id="feedbackSection">
-            <h2>Feedback</h2>
-            <p>If you have feedback, please <a href="mailto:your_email@example.com">contact us</a>.</p>
-        </div>
     </div>
+
+    <input type="text" id="guess" placeholder="Your Guess" />
+    <button onclick="submitGuess()">Submit</button>
+
+    <div id="result"></div>
+    
+    <div id="beta-features">
+        <label for="override-date">Beta Test - Choose a date:</label>
+        <input type="date" id="override-date" min="2023-07-30">
+        <button onclick="loadPuzzleForGivenDate()">Load Puzzle</button>
+    </div>
+
+    <div id="social-share" style="display: none;">
+        Share: <span id="share-text"></span>
+    </div>
+
+    <div id="about-section">
+        <h2>About</h2>
+        <p>Lorem ipsum...</p>
+    </div>
+
+    <div id="feedback-section">
+        <h2>Feedback</h2>
+        <p>Placeholder for feedback functionality.</p>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
