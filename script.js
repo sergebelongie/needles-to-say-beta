@@ -1,61 +1,41 @@
-let currentPuzzle = {};
+const gameArea = document.getElementById("gameArea");
+const clueElement = document.getElementById("clue");
+const guessInput = document.getElementById("guessInput");
+const submitBtn = document.getElementById("submitBtn");
+const resultElement = document.getElementById("result");
 
-document.addEventListener("DOMContentLoaded", function() {
-    loadPuzzleForToday();
-});
+let currentPairIndex = 0;
 
-async function fetchData() {
-    const response = await fetch("data.csv");
-    const data = await response.text();
-    const puzzles = data.split("\n").map(row => {
-        const [date, clue, word1, word2] = row.split(",");
-        return { date, clue, word1, word2 };
-    });
-    return puzzles;
-}
+function displayClueAndCheckGuess() {
+    if (currentPairIndex < wordPairs.length) {
+        const currentPair = wordPairs[currentPairIndex];
+        clueElement.textContent = `Clue: ${currentPair.clue}`;
+        
+        submitBtn.disabled = false;
+        resultElement.textContent = "";
 
-async function loadPuzzleForToday() {
-    const puzzles = await fetchData();
-    const currentDate = new Date().toISOString().split("T")[0];
-    currentPuzzle = puzzles.find(puzzle => puzzle.date === currentDate);
-    displayPuzzle(currentPuzzle);
-}
+        submitBtn.addEventListener("click", () => {
+            const guess = guessInput.value.toLowerCase();
+            if (guess === currentPair.answer.toLowerCase()) {
+                resultElement.textContent = "Correct!";
+            } else {
+                resultElement.textContent = "Incorrect. Try again.";
+            }
 
-function displayPuzzle(puzzle) {
-    document.getElementById("clue").textContent = puzzle.clue;
-}
-
-async function loadPuzzleForGivenDate() {
-    const puzzles = await fetchData();
-    const selectedDate = document.getElementById("override-date").value;
-    currentPuzzle = puzzles.find(puzzle => puzzle.date === selectedDate);
-    displayPuzzle(currentPuzzle);
-}
-
-function submitGuess() {
-    let userGuess = document.getElementById("guess").value.trim();
-    console.log("User's Guess:", userGuess);
-    console.log("Selected Puzzle:", currentPuzzle);
-
-    if (userGuess.toLowerCase() === (currentPuzzle.word1 + ' ' + currentPuzzle.word2).toLowerCase()) {
-        showCorrectMessage();
-        showSocialShare();
+            guessInput.value = "";
+            submitBtn.disabled = true;
+            currentPairIndex++;
+            displayClueAndCheckGuess();
+        });
     } else {
-        document.getElementById("result").textContent = "Try again!";
+        gameArea.innerHTML = "<p>Congratulations! You've completed the game.</p>";
     }
 }
 
-function showCorrectMessage() {
-    document.getElementById("result").textContent = "Correct!";
-}
+// Replace this with your actual word pairs data
+const wordPairs = [
+    { clue: "unnecessary sewing implement", answer: "needless needles" },
+    { clue: "Five o’clock shadow grizzly", answer: "beard bear" }
+];
 
-function showSocialShare() {
-    document.getElementById("social-share").style.display = "block";
-    document.getElementById("share-text").textContent = `I solved today's puzzle on Needles to Say! #NeedlesToSay`;
-}
-
-document.getElementById("guess").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        submitGuess();
-    }
-});
+displayClueAndCheckGuess();
