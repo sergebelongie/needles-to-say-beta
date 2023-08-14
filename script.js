@@ -33,7 +33,7 @@ window.onload = () => {
 
 function parseCSV(data) {
 
-    const rows = data.split('\n').slice(1);
+    const rows = data.split('\n').filter(row => row.trim() !== '' && row.includes(','));
 return rows.map(row => {
     const [clue, word1, word2] = row.split(',');
     if (!clue || !word1 || !word2) {
