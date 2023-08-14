@@ -10,15 +10,15 @@
         <h1>Needles to Say</h1>
         <p>Try to guess the word pair based on the clue.</p>
         <div id="gameArea">
+            <p>Select a puzzle:</p>
+            <select id="puzzleSelect"></select>
             <p id="clue"></p>
             <input type="text" id="guessInput" placeholder="Your guess">
             <button id="submitBtn">Submit</button>
             <p id="result"></p>
         </div>
-        <!-- Add this within the <div id="gameArea"> section -->
-        <p>Select a puzzle:</p>
-        <select id="puzzleSelect"></select>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
