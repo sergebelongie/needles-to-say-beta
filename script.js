@@ -1,108 +1,62 @@
-let puzzles = [];
-let currentPuzzle = null;
-let timerInterval = null;
-let correctAnswer = null;
-
-// Function to parse CSV data
-function parseCSV(data) {
-    const rows = data.split('\n').filter(row => row.trim() !== '' && row.includes(','));
-    return rows.map(row => {
-        const [date, clue, word1, word2] = row.split(',');
-        if (!date || !clue || !word1 || !word2) {
-            console.error("Malformed row:", row);
-            return null;
-        }
-        try {
-            return {
-                date,
-                clue,
-                answers: word1.split('|').map((w1, index) => [w1, word2.split('|')[index]])
-            };
-        } catch (e) {
-            console.error("Error parsing row:", row, "Error:", e);
-            return null;
-        }
-    }).filter(Boolean);
+// Function to get the day number since 30-Jul-2023
+function getDayNumberSinceReferenceDate() {
+    const referenceDate = new Date('2023-07-30');
+    const currentDate = new Date();
+    const differenceInTime = currentDate - referenceDate;
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
+    return differenceInDays;
 }
 
-// Function to load puzzles from data.csv
-function loadPuzzles() {
+// Function to start the game
+function startGame() {
+    document.getElementById('splashScreen').style.display = 'none';
+    document.getElementById('gameInterface').style.display = 'block';
+    fetchDailyPuzzle();
+}
+
+// Function to fetch the daily puzzle from data.csv
+function fetchDailyPuzzle() {
+    let dayNumber = getDayNumberSinceReferenceDate();
+    let totalEntries = 47;
+    let puzzleIndex = dayNumber % totalEntries;
+
+    // Using the Fetch API to get the CSV data
     fetch('data.csv')
         .then(response => response.text())
         .then(data => {
-            puzzles = parseCSV(data);
+            let rows = data.split("\n"); // Splitting data into rows
+            let selectedRow = rows[puzzleIndex + 1]; // +1 considering the header row
+            let columns = selectedRow.split(","); // Splitting row into columns
+
+            let clue = columns[0];
+            document.getElementById('clue').innerText = clue;
+
+            // If needed, you can also extract the possible answers here
+            // For simplicity, we're just fetching the clue for now
         })
         .catch(error => {
-            console.error("There was an error loading the CSV data:", error);
+            console.error("Error fetching the puzzle data: ", error);
         });
 }
 
-// Function to start a new game
-function startGame() {
-    currentPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
-    correctAnswer = currentPuzzle.answers[0][0] + " " + currentPuzzle.answers[0][1];
+// Function to submit the guess and check it
+function submitGuess() {
+    let userInputWord1 = document.getElementById('inputWord1').value.toLowerCase();
+    let userInputWord2 = document.getElementById('inputWord2').value.toLowerCase();
 
-    document.getElementById('clue').textContent = currentPuzzle.clue;
-    document.getElementById('guess-input').value = '';
-    document.getElementById('result').textContent = '';
-    document.getElementById('submit-button').classList.remove('disabled');
-
-    clearInterval(timerInterval);
-    timerInterval = setInterval(updateTimer, 1000);
-    updateTimer();
-}
-
-// Function to update the timer display
-function updateTimer() {
-    const timerElement = document.getElementById('timer');
-    let [minutes, seconds] = timerElement.textContent.split(':').map(Number);
-    seconds++;
-    if (seconds === 60) {
-        seconds = 0;
-        minutes++;
-    }
-    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-// Function to check the user's guess
-function checkGuess() {
-    const guessInput = document.getElementById('guess-input');
-    const guess = guessInput.value.trim().toLowerCase();
-    if (guess === correctAnswer.toLowerCase()) {
-        showResult(true);
-    }
-}
-
-// Function to show the result
-function showResult(isCorrect) {
-    const resultElement = document.getElementById('result');
-    const guessInput = document.getElementById('guess-input');
-    clearInterval(timerInterval);
-    if (isCorrect) {
-        resultElement.textContent = "Correct!";
-        guessInput.disabled = true;
-        guessInput.value = correctAnswer;
-        document.getElementById('submit-button').classList.add('disabled');
+    // Logic to check the user's guess against the solution
+    // For simplicity, let's assume a dummy check for now
+    if (userInputWord1 === "dummy1" && userInputWord2 === "dummy2") {
+        alert('Correct!');
     } else {
-        resultElement.textContent = "Incorrect. Try again!";
+        alert('Incorrect. Try again.');
     }
 }
 
-// Function to override the daily challenge
-function overrideChallenge() {
-    const overrideDate = document.getElementById('override-date').value;
-    if (overrideDate) {
-        currentPuzzle = puzzles.find(puzzle => puzzle.date === overrideDate);
-        if (currentPuzzle) {
-            correctAnswer = currentPuzzle.answers[0][0] + " " + currentPuzzle.answers[0][1];
-            document.getElementById('clue').textContent = currentPuzzle.clue;
-            document.getElementById('guess-input').value = '';
-            document.getElementById('result').textContent = '';
-            document.getElementById('submit-button').classList.remove('disabled');
-        }
-    }
-}
+// Function to submit feedback
+function submitFeedback() {
+    let feedbackText = document.getElementById('feedbackText').value;
 
-window.onload = function () {
-    loadPuzzles();
+    // Logic to handle the feedback submission. This might involve sending it to a server or storing it somewhere.
+    alert('Thank you for your feedback!');
 }
