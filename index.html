@@ -3,44 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Needles to Say</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Needles to Say Game</title>
 </head>
 <body>
-
-<div id="game">
-    <h1>Needles to Say</h1>
-
-    <div id="clue-container">
-        <p id="clue"></p>
+    <div class="container">
+        <h1>Needles to Say</h1>
+        <p>Try to guess the word pair based on the clue.</p>
+        <div id="gameArea">
+            <p id="clue"></p>
+            <input type="text" id="guessInput" placeholder="Your guess">
+            <button id="submitBtn">Submit</button>
+            <p id="result"></p>
+        </div>
     </div>
-
-    <input type="text" id="guess" placeholder="Your Guess" />
-    <button onclick="submitGuess()">Submit</button>
-
-    <div id="result"></div>
-    
-    <div id="beta-features">
-        <label for="override-date">Beta Test - Choose a date:</label>
-        <input type="date" id="override-date" min="2023-07-30">
-        <button onclick="loadPuzzleForGivenDate()">Load Puzzle</button>
-    </div>
-
-    <div id="social-share" style="display: none;">
-        Share: <span id="share-text"></span>
-    </div>
-
-    <div id="about-section">
-        <h2>About</h2>
-        <p>Lorem ipsum...</p>
-    </div>
-
-    <div id="feedback-section">
-        <h2>Feedback</h2>
-        <p>Placeholder for feedback functionality.</p>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
