@@ -55,11 +55,13 @@ function submitGuess() {
     let userInputWord2 = document.getElementById('inputWord2').value.toLowerCase().trim();
 
     if (currentAnswers[0].includes(userInputWord1) && currentAnswers[1].includes(userInputWord2)) {
-        let endTime = new Date();
-        let timeTaken = (endTime - startTime) / 1000;
-        let minutes = Math.floor(timeTaken / 60);
-        let seconds = Math.floor(timeTaken % 60);
-        alert(`Correct! It took you ${minutes}m ${seconds}s.`);
+    let endTime = new Date();
+    let timeTaken = (endTime - startTime) / 1000;
+    let minutes = Math.floor(timeTaken / 60);
+    let seconds = Math.floor(timeTaken % 60);
+    alert(`Correct! It took you ${minutes}m ${seconds}s.`);
+    document.getElementById('shareButton').style.display = 'block'; // Show the share button
+
     } else {
         alert('Incorrect. Try again.');
     }
@@ -74,3 +76,22 @@ function submitFeedback() {
         // Send the feedback to a server or store it, as needed
     }
 }
+
+function copyToClipboard() {
+    let dayNumber = getDayNumberSinceReferenceDate();
+    let endTime = new Date();
+    let timeTaken = (endTime - startTime) / 1000;
+    let minutes = Math.floor(timeTaken / 60);
+    let seconds = Math.floor(timeTaken % 60);
+    let shareText = `Needles to Say #${dayNumber} ${minutes}m:${seconds}s`;
+
+    let textArea = document.createElement('textarea');
+    textArea.value = shareText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+
+    alert('Result copied to clipboard! Share it on your favorite platform.');
+}
+
