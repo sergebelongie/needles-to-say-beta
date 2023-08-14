@@ -24,51 +24,16 @@ function parseCSV(data) {
     }).filter(Boolean);
 }
 
-// Function to start a new game
-function startGame() {
-    currentPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
-    correctAnswer = currentPuzzle.answers[0][0] + " " + currentPuzzle.answers[0][1];
-    
-    document.getElementById('clue').textContent = currentPuzzle.clue;
-    document.getElementById('guess-input').value = '';
-    document.getElementById('result').textContent = '';
-    document.getElementById('submit-button').classList.remove('disabled');
-    
-    clearInterval(timerInterval);
-    timerInterval = setInterval(updateTimer, 1000);
-}
-
-// Function to check the user's guess
-function checkGuess() {
-    const guessInput = document.getElementById('guess-input');
-    const submitButton = document.getElementById('submit-button');
-    
-    let guess = guessInput.value.trim();
-    
-    if (submitButton.classList.contains('disabled')) {
-        return;
-    }
-
-    submitButton.classList.add('disabled');
-    
-    if (guess.includes(' ') || guess.length >= correctAnswer.length) {
-        guess = guess.replace(',', '');  // remove comma if present
-        
-        if (correctAnswer.includes(guess)) {
-            clearInterval(timerInterval);
-            showResult(true);
-        } else {
-            guessInput.value = '';
-            guessInput.placeholder = 'Try again!';
-            guessInput.classList.add('incorrect');
-            setTimeout(() => {
-                guessInput.placeholder = 'Enter your guess...';
-                guessInput.classList.remove('incorrect');
-            }, 1000);
-        }
-    }
-    
-    submitButton.classList.remove('disabled');
+// Function to load puzzles from data.csv
+function loadPuzzles() {
+    fetch('data.csv')
+        .then(response => response.text())
+        .then(data => {
+            puzzles = parseCSV(data);
+        })
+        .catch(error => {
+            console.error("There was an error loading the CSV data:", error);
+        });
 }
 
 // ... other functions
