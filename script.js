@@ -27,8 +27,12 @@ function fetchDailyPuzzle() {
     fetch('data.csv')
         .then(response => response.text())
         .then(data => {
+            console.log("Raw CSV Data:", data); // This will log the entire CSV
+
             let rows = data.split("\n");
             let selectedRow = rows[puzzleIndex + 1];
+            console.log("Selected Row:", selectedRow); // This will log the row of the day's puzzle
+
             let columns = selectedRow.split(",");
 
             let clue = columns[0];
@@ -38,11 +42,13 @@ function fetchDailyPuzzle() {
                 columns[1].split("|"),
                 columns[2].split("|")
             ];
+            console.log("Parsed Answers:", currentAnswers); // This will log the parsed answers for the day's puzzle
         })
         .catch(error => {
             console.error("Error fetching the puzzle data: ", error);
         });
 }
+
 
 function submitGuess() {
     let userInputWord1 = document.getElementById('inputWord1').value.toLowerCase().trim();
