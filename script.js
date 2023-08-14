@@ -19,7 +19,7 @@ const solutionMessage = document.getElementById('solutionMessage');
 const isBetaTesting = true;
 
 window.onload = () => {
-    fetch('https://sergebelongie.github.io/needles-to-say-beta/data.csv?' + new Date().getTime())
+    fetch('./data.csv')
         .then(response => response.text())
         .then(data => {
             puzzlesData = parseCSV(data);
