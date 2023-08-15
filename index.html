@@ -1,77 +1,83 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f7f7;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Needles to Say</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Welcome to "Needles to Say"!</h2>
+            <p>
+                Guess a word pair in which the second word is obtained by taking the first word and dropping the last letter. Both words must be in common use in English. The clues have the style of crossword puzzle clues.
+            </p>
+        </div>
+    </div>
 
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1;
-}
+    <!-- Main Game Content -->
+    <div id="gameContent">
+        <h1>Needles to Say</h1>
+        <p id="clue">Loading...</p>
+        <input type="text" id="guessInput" placeholder="Enter your guess...">
+        <button id="submitGuess">Submit</button>
+        <p id="feedbackMessage"></p>
+    </div>
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 8px;
-}
+    <!-- Feedback & About Tabs -->
+    <div id="tabs">
+        <button id="feedbackBtn">Feedback</button>
+        <button id="aboutBtn">About</button>
+    </div>
+    
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Feedback</h2>
+            <p>
+                Have a suggestion or found a bug? Send us an email at <a href="mailto:email@example.com">email@example.com</a>
+            </p>
+        </div>
+    </div>
 
-.close-btn {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>About</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.
+            </p>
+        </div>
+    </div>
 
-.close-btn:hover {
-    color: black;
-}
+    <!-- Daily Challenge Section -->
+    <div id="dailyChallenge">
+        <h2>Daily Challenge</h2>
+        <p>Guess today's word pair!</p>
+    </div>
 
-#gameContent {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    <!-- Beta Testing Section (hidden by default) -->
+    <div id="betaTesting" style="display: none;">
+        <h2>Beta Testing Mode</h2>
+        <p>Enter a puzzle number:</p>
+        <input type="text" id="puzzleNumber" placeholder="Puzzle number...">
+        <button id="loadPuzzle">Load Puzzle</button>
+    </div>
 
-#tabs {
-    margin-top: 20px;
-}
+    <!-- Social Sharing Section -->
+    <div id="socialSharing" style="display: none;">
+        <h2>Congratulations!</h2>
+        <p>Share your achievement:</p>
+        <textarea id="shareText" readonly></textarea>
+        <button id="copyToClipboard">Copy</button>
+    </div>
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-input[type="text"] {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 80%;
-    max-width: 400px;
-}
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
