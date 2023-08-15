@@ -47,7 +47,7 @@ function checkGuess() {
         document.getElementById('feedbackMessage').textContent = `Correct! Time taken: ${timeTaken} seconds.`;
         
         let puzzleIndex = puzzles.indexOf(currentPuzzle); // Get puzzle ID
-        let shareText = `Needles to Say ${puzzleIndex + 1} ${timeTaken} sec.`;
+        let shareText = `I solved Needles to Say puzzle no. ${puzzleIndex + 1} in ${timeTaken} sec.`;
         
         document.getElementById('shareText').value = shareText;
         document.getElementById('socialSharing').style.display = 'block';
