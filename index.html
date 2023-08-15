@@ -5,25 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Needles to Say</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
-<body>
+<body onload="initializeGame()">
     <!-- Splash Screen -->
     <div id="splashScreen">
         <h1>Welcome to Needles to Say!</h1>
         <p>Guess a word pair based on the clue provided. The second word is just the first word without its last letter!</p>
-        <button id="startGameBtn">Start Game</button>
+        <button onclick="startGame()">Start Game</button>
     </div>
 
     <!-- Main Game UI -->
     <div id="gameUI" hidden>
         <h2 id="dailyChallengeTitle">Daily Challenge</h2>
         <p id="dailyChallengeClue"></p>
-        <input type="text" id="guessInput" placeholder="Your Guess">
-        <button id="submitGuessBtn">Submit</button>
+        <input type="text" id="guessInput" placeholder="Your Guess" onkeyup="checkInput(event)">
+        <button onclick="submitGuess()">Submit</button>
         <div id="betaTestUI" hidden>
             <input type="number" id="puzzleNumberInput" placeholder="Puzzle Number">
-            <button id="loadPuzzleBtn">Load Puzzle</button>
+            <button onclick="loadCustomPuzzle()">Load Puzzle</button>
         </div>
         <p id="gameFeedback"></p>
     </div>
@@ -31,20 +30,22 @@
     <!-- Feedback Tab -->
     <div id="feedbackTab">
         <h2>Feedback</h2>
-        <textarea placeholder="Your feedback..."></textarea>
-        <button>Send Feedback to email@example.com</button>
+        <textarea id="feedbackText" placeholder="Your feedback..."></textarea>
+        <button onclick="sendFeedback()">Send Feedback</button>
     </div>
 
     <!-- About Tab -->
-    <div id="aboutTab" hidden>
+    <div id="aboutTab">
         <h2>About</h2>
-        <p>Lorem ipsum...</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquam orci non orci vehicula, at venenatis lorem dictum.</p>
     </div>
 
     <!-- Social Sharing -->
     <div id="socialSharing" hidden>
-        <p>Share your score: Needles to Say <span id="puzzleID"></span> <span id="timeTaken"></span></p>
-        <button>Copy to Clipboard</button>
+        <p>Share your score: Needles to Say <span id="puzzleID"></span> in <span id="timeTaken"></span> seconds</p>
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
