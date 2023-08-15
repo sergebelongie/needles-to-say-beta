@@ -1,59 +1,34 @@
-const gameArea = document.getElementById("gameArea");
-const clueElement = document.getElementById("clue");
-const guessInput = document.getElementById("guessInput");
-const submitBtn = document.getElementById("submitBtn");
-const resultElement = document.getElementById("result");
-const puzzleSelect = document.getElementById("puzzleSelect");
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Game initialized!");
 
-let currentPairIndex = 0;
-let wordPairs = [];
+    // TODO: Load CSV data.
+    loadGameData();
 
-async function fetchAndParseCSV() {
-    const csvUrl = 'data.csv';
-    const response = await fetch(csvUrl);
-    const csvData = await response.text();
-    
-    wordPairs = Papa.parse(csvData, { header: true }).data;
-    populatePuzzleSelect();
-    displaySelectedPuzzle(currentPairIndex);
+    // TODO: Implement game logic.
+    setupGame();
+
+    // TODO: Implement guess checking logic.
+
+    // TODO: Implement beta testing override.
+});
+
+function loadGameData() {
+    // Placeholder: Load the game data from the CSV file.
+    console.log("Loading game data...");
 }
 
-function displaySelectedPuzzle(index) {
-    if (index < wordPairs.length) {
-        const currentPair = wordPairs[index];
-        clueElement.textContent = `Clue: ${currentPair.clue}`;
-        
-        submitBtn.disabled = false;
-        resultElement.textContent = "";
-
-        submitBtn.addEventListener("click", () => {
-            const guess = guessInput.value.toLowerCase();
-            if (guess === currentPair.answer.toLowerCase()) {
-                resultElement.textContent = "Correct!";
-            } else {
-                resultElement.textContent = "Incorrect. Try again.";
-            }
-
-            guessInput.value = "";
-            submitBtn.disabled = true;
-        });
-    } else {
-        gameArea.innerHTML = "<p>Congratulations! You've completed all puzzles.</p>";
-    }
+function setupGame() {
+    // Placeholder: Set up the game logic.
+    console.log("Setting up the game...");
 }
 
-function populatePuzzleSelect() {
-    for (let i = 0; i < wordPairs.length; i++) {
-        const option = document.createElement("option");
-        option.value = i;
-        option.textContent = `Puzzle ${i + 1}`;
-        puzzleSelect.appendChild(option);
-    }
-
-    puzzleSelect.addEventListener("change", () => {
-        currentPairIndex = parseInt(puzzleSelect.value);
-        displaySelectedPuzzle(currentPairIndex);
+function showPage(pageId) {
+    // Hide all pages
+    let pages = document.querySelectorAll('.page');
+    pages.forEach(page => {
+        page.style.display = 'none';
     });
-}
 
-fetchAndParseCSV();
+    // Show the requested page
+    document.getElementById(pageId).style.display = 'block';
+}
