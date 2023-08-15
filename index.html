@@ -20,7 +20,7 @@
     <!-- Splash Screen -->
     <div id="splash-screen" class="page">
         <h1>Welcome to "Needles to Say"!</h1>
-        <p>Rules: [Provide rules here]</p>
+        <p>Guess the word pair where the second word is obtained by dropping the last letter of the first word!</p>
     </div>
 
     <!-- Feedback Tab -->
@@ -40,21 +40,22 @@
     <!-- Daily Challenge -->
     <div id="daily-challenge" class="page">
         <h2>Daily Challenge</h2>
-        <input type="text" placeholder="Your guess...">
-        <button>Submit</button>
+        <p>Clue: <span id="daily-clue"></span></p>
+        <input type="text" id="guess-input" placeholder="Your guess...">
+        <button onclick="checkGuess()">Submit</button>
     </div>
 
     <!-- Beta Testing Input -->
     <div id="beta-testing" class="page">
         <h2>Beta Testing</h2>
-        <input type="number" placeholder="Enter puzzle number...">
-        <button>Submit</button>
+        <input type="number" id="puzzle-number-input" placeholder="Enter puzzle number...">
+        <button onclick="loadPuzzleByNumber()">Submit</button>
     </div>
 
     <!-- Social Sharing Component -->
     <div id="social-sharing" style="display: none;">
-        <p>Needles to Say XXX YYY</p>
-        <button>Copy to Clipboard</button>
+        <p>Needles to Say <span id="puzzle-id"></span> <span id="time-taken"></span></p>
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
     </div>
 
     <script src="script.js"></script>
