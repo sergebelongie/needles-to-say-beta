@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('submitGuess').addEventListener('click', checkGuess);
     document.getElementById('loadPuzzle').addEventListener('click', loadBetaPuzzle);
     document.getElementById('copyToClipboard').addEventListener('click', copyShareText);
+    document.getElementById('guessInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            checkGuess();
+        }
+    });
 });
 
 function loadDailyPuzzle() {
@@ -40,7 +45,10 @@ function checkGuess() {
     if (guess === answer) {
         let timeTaken = Math.floor((Date.now() - startTime) / 1000);
         document.getElementById('feedbackMessage').textContent = `Correct! Time taken: ${timeTaken} seconds.`;
-        let shareText = `Needles to Say ${currentPuzzle.clue} ${timeTaken}`;
+        
+        let puzzleIndex = puzzles.indexOf(currentPuzzle); // Get puzzle ID
+        let shareText = `Needles to Say ${puzzleIndex + 1} ${timeTaken} sec.`;
+        
         document.getElementById('shareText').value = shareText;
         document.getElementById('socialSharing').style.display = 'block';
     } else {
