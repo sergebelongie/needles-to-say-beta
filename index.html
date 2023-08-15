@@ -8,52 +8,42 @@
 </head>
 <body>
     <!-- Splash Screen -->
-    <div id="splashScreen" class="modal">
-        <div class="modal-content">
-            <p>Welcome to Needles to Say!</p>
-            <p>The aim of the game is to guess the word pair based on the given clue. The second word is obtained by taking the first word and dropping its last letter.</p>
-            <button id="dismissButton">Dismiss</button>
+    <div id="splashScreen">
+        <p>Welcome to Needles to Say!</p>
+        <p>Objective: Guess a pair of words where the second word is obtained by dropping the last letter of the first word.</p>
+        <button onclick="dismissSplash()">Dismiss</button>
+    </div>
+    
+    <!-- Main Game Content -->
+    <div id="gameContent">
+        <h1>Needles to Say</h1>
+        <p id="puzzleClue">Clue: </p>
+        <input type="text" id="word1Guess" placeholder="First Word">
+        <input type="text" id="word2Guess" placeholder="Second Word">
+        <button onclick="submitGuess()">Submit</button>
+
+        <!-- Beta Controls -->
+        <div id="betaControls" style="display:none">
+            <input type="number" id="puzzleNumber" placeholder="Puzzle Number">
+            <button onclick="getPuzzle(document.getElementById('puzzleNumber').value)">Load Puzzle</button>
         </div>
     </div>
     
-    <!-- Feedback Modal -->
-    <div id="feedbackModal" class="modal">
-        <div class="modal-content">
-            <p>Send us your feedback:</p>
-            <textarea id="feedbackText" rows="4" placeholder="Enter your feedback..."></textarea>
-            <button id="sendFeedback">Send</button>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            <button id="closeAbout">Close</button>
-        </div>
+    <!-- Feedback Popup -->
+    <div id="feedbackPopup">
+        <p>Feedback</p>
+        <textarea placeholder="Your feedback..."></textarea>
+        <button onclick="submitFeedback()">Send</button>
+        <button onclick="closeFeedback()">Close</button>
     </div>
     
-    <!-- Main Content -->
-    <div id="mainContent">
-        <h1>Needles to Say (beta)</h1>
-        <p id="clueText">Clue: </p>
-        <input type="text" id="guessInput" placeholder="Enter your guess...">
-        <button id="submitButton">Submit</button>
-        <button id="feedbackButton">Feedback</button>
-        <button id="aboutButton">About</button>
+    <!-- About Popup -->
+    <div id="aboutPopup">
+        <p>About the Developer</p>
+        <p>Lorem ipsum ...</p>
+        <button onclick="closeAbout()">Close</button>
     </div>
-
-    <!-- Social Share -->
-    <div id="socialShare">
-        <p>I solved Needles to Say puzzle no. <span id="puzzleID"></span> in <span id="timeTaken"></span> sec.</p>
-    </div>
-
-    <!-- Beta Testing Input -->
-    <div id="betaInput">
-        <input type="text" id="betaPuzzleID" placeholder="Enter Puzzle ID...">
-        <button id="loadPuzzle">Load Puzzle</button>
-    </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
