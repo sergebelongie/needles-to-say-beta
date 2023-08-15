@@ -1,115 +1,108 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Variables
-    let betaMode = true; // Beta testing flag. Set this to false for production.
-    let currentPuzzle = null;
-    let startTime = null;
-    let endTime = null;
+let puzzles = [];
 
-    // DOM Elements
-    const splashScreen = document.getElementById('splashScreen');
-    const clueText = document.getElementById('clueText');
-    const guessInput = document.getElementById('guessInput');
-    const submitButton = document.getElementById('submitButton');
-    const feedbackButton = document.getElementById('feedbackButton');
-    const feedbackModal = document.getElementById('feedbackModal');
-    const sendFeedback = document.getElementById('sendFeedback');
-    const aboutButton = document.getElementById('aboutButton');
-    const aboutModal = document.getElementById('aboutModal');
-    const closeAbout = document.getElementById('closeAbout');
-    const puzzleIDElem = document.getElementById('puzzleID');
-    const timeTakenElem = document.getElementById('timeTaken');
-    const betaInput = document.getElementById('betaInput');
-
-    // Event Listeners
-    document.getElementById('dismissButton').addEventListener('click', () => {
-        splashScreen.style.display = 'none';
-    });
-
-    feedbackButton.addEventListener('click', () => {
-        feedbackModal.style.display = 'block';
-    });
-
-    sendFeedback.addEventListener('click', () => {
-        feedbackModal.style.display = 'none';
-        // Placeholder for sending feedback. For now, we'll just log it.
-        console.log("Feedback sent:", document.getElementById('feedbackText').value);
-    });
-
-    aboutButton.addEventListener('click', () => {
-        aboutModal.style.display = 'block';
-    });
-
-    closeAbout.addEventListener('click', () => {
-        aboutModal.style.display = 'none';
-    });
-
-    submitButton.addEventListener('click', checkGuess);
-    guessInput.addEventListener('keypress', (event) => {
-        if (event.keyCode === 13) { // Enter key
-            checkGuess();
-        }
-    });
-
-    // Functions
-    function loadPuzzle(id) {
-        // Fetch the data from the CSV file
-        fetch('data.csv')
-            .then(response => response.text())
-            .then(data => {
-                const puzzles = data.split('\n').slice(1); // Excluding the header
-                const index = (id - 1) % puzzles.length;
-                const puzzleData = puzzles[index].split(',');
-                currentPuzzle = {
-                    clue: puzzleData[0],
-                    word1: puzzleData[1].toLowerCase(),
-                    word2: puzzleData[2].toLowerCase()
-                };
-
-                // Update the UI with the clue
-                clueText.innerText = 'Clue: ' + currentPuzzle.clue;
-            })
-            .catch(error => {
-                console.error('Error loading puzzle:', error);
-            });
-    }
-
-    function checkGuess() {
-        const guess = guessInput.value.toLowerCase();
-        if (guess === currentPuzzle.word1 + ' ' + currentPuzzle.word2) {
-            endTime = new Date();
-            const timeTaken = Math.floor((endTime - startTime) / 1000);
-            alert('Correct!'); // This can be replaced with a fancier modal or notification in the future.
-            puzzleIDElem.innerText = calculatePuzzleID();
-            timeTakenElem.innerText = timeTaken;
-        } else {
-            alert('Incorrect. Try again.'); // This can be replaced with a fancier modal or notification in the future.
-        }
-    }
-
-    function calculatePuzzleID() {
-        const startDate = new Date('2023-07-30');
-        const currentDate = new Date();
-        const differenceInTime = currentDate - startDate;
-        const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-        return differenceInDays;
-    }
-
-    // Initial Setup
-    if (betaMode) {
-        betaInput.style.display = 'block';
-        document.getElementById('loadPuzzle').addEventListener('click', () => {
-            const id = parseInt(document.getElementById('betaPuzzleID').value);
-            if (id && id > 0) {
-                loadPuzzle(id);
-            } else {
-                alert('Invalid Puzzle ID.');
-            }
-        });
-    } else {
-        const id = calculatePuzzleID();
-        loadPuzzle(id);
-    }
-
-    startTime = new Date();
+document.addEventListener("DOMContentLoaded", function() {
+    showSplashScreen();
+    fetchPuzzles();  // Fetch puzzles and then load the puzzle
 });
 
+function showSplashScreen() {
+    document.getElementById("splashScreen").style.display = "block";
+}
+
+function dismissSplash() {
+    document.getElementById("splashScreen").style.display = "none";
+}
+
+function fetchPuzzles() {
+    fetch('Data.csv')
+        .then(response => response.text())
+        .then(data => {
+            let rows = data.split('\n');
+            rows.forEach((row, index) => {
+                if (index !== 0) {  // Exclude header
+                    let columns = row.split(',');
+                    puzzles.push({
+                        clue: columns[0],
+                        word1: columns[1],
+                        word2: columns[2]
+                    });
+                }
+            });
+            loadPuzzle();
+        })
+        .catch(error => console.error('Error fetching the puzzles:', error));
+}
+
+function loadPuzzle() {
+    let today = new Date();
+    let startDate = new Date('2023-07-30');
+    let diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+
+    let puzzleIndex = diffDays % puzzles.length;
+    let puzzle = puzzles[puzzleIndex];
+
+    document.getElementById("puzzleClue").innerText = "Clue: " + puzzle.clue;
+}
+
+function openFeedback() {
+    document.getElementById("feedbackPopup").style.display = "block";
+}
+
+function closeFeedback() {
+    document.getElementById("feedbackPopup").style.display = "none";
+}
+
+function openAbout() {
+    document.getElementById("aboutPopup").style.display = "block";
+}
+
+function closeAbout() {
+    document.getElementById("aboutPopup").style.display = "none";
+}
+
+let startTime;
+let endTime;
+
+function startTimer() {
+    startTime = new Date();
+}
+
+function stopTimer() {
+    endTime = new Date();
+    let timeDiff = endTime - startTime; // in ms
+    return Math.floor(timeDiff / 1000); // to seconds
+}
+
+function submitGuess() {
+    var word1 = document.getElementById("word1Guess").value;
+    var word2 = document.getElementById("word2Guess").value;
+
+    if (word1.toLowerCase() === puzzles[currentPuzzleIndex].word1.toLowerCase() && word2.toLowerCase() === puzzles[currentPuzzleIndex].word2.toLowerCase()) {
+        let timeTaken = stopTimer();
+        console.log("Correct Guess! Time taken: " + timeTaken + " seconds.");
+
+        let shareString = `I solved Needles to Say puzzle no. ${currentPuzzleIndex + 1} in ${timeTaken} sec.`;
+        navigator.clipboard.writeText(shareString)
+            .then(() => {
+                console.log('Text copied to clipboard');
+            })
+            .catch(err => {
+                console.log('Error in copying text: ', err);
+            });
+    } else {
+        console.log("Incorrect Guess. Try again!");
+    }
+}
+
+let betaMode = true;  // Toggle this flag for beta testing
+
+function getPuzzle(puzzleNumber) {
+    let puzzle = puzzles[puzzleNumber - 1];  // 1-indexed for user-friendliness
+    if (puzzle) {
+        document.getElementById("puzzleClue").innerText = "Clue: " + puzzle.clue;
+    } else {
+        console.log("Invalid puzzle number!");
+    }
+}
+
+document.body.classList.add('fade-in');
