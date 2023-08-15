@@ -6,25 +6,47 @@
     <title>Needles to Say (beta)</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="initializeGame()">
+<body>
+    <!-- Splash Screen Popup -->
+    <div id="splashScreen" class="popup">
+        <div class="popup-content">
+            <h2>Welcome to Needles to Say!</h2>
+            <p>Guess a pair of words based on the clue provided. The second word is obtained by dropping the last letter of the first word.</p>
+            <button id="dismissButton">Dismiss</button>
+        </div>
+    </div>
 
-<div class="splash-screen" id="splash">
-    <p>Welcome to Needles to Say!</p>
-    <p>Guess a pair of words based on the clue. Drop the last letter of the first word to get the second word!</p>
-    <button onclick="dismissSplash()">Dismiss</button>
-</div>
+    <!-- Feedback Popup -->
+    <div id="feedbackPopup" class="popup">
+        <div class="popup-content">
+            <h2>Feedback</h2>
+            <textarea id="feedbackText" placeholder="Send bug reports, suggestions, etc."></textarea>
+            <button id="sendFeedback">Send</button>
+        </div>
+    </div>
 
-<h1>Needles to Say</h1>
-<p>Clue: <span id="clue"></span></p>
-<input type="text" id="word1" placeholder="First word">
-<input type="text" id="word2" placeholder="Second word">
-<button onclick="submitGuess()">Submit</button>
-<button onclick="copyToClipboard()">Share</button>
-<input type="number" id="betaPuzzleId" placeholder="Beta Puzzle ID">
-<button onclick="loadBetaPuzzle()">Load</button>
-<button onclick="showAbout()">About</button>
-<button onclick="showFeedback()">Feedback</button>
+    <!-- About Popup -->
+    <div id="aboutPopup" class="popup">
+        <div class="popup-content">
+            <h2>About</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet feugiat libero.</p>
+        </div>
+    </div>
 
-<script src="script.js"></script>
+    <!-- Main Game Content -->
+    <div id="gameContent">
+        <h1>Needles to Say (beta)</h1>
+        <div id="tabs">
+            <button id="feedbackTab">Feedback</button>
+            <button id="aboutTab">About</button>
+        </div>
+        <p id="clue">Clue: </p>
+        <input id="guessInput" type="text" placeholder="Enter your guess...">
+        <button id="submitGuess">Submit</button>
+        <button id="shareButton" style="display: none;">Share</button>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
 </body>
 </html>
