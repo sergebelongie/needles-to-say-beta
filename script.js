@@ -1,55 +1,74 @@
 let puzzles = [];
-let currentPuzzleId = 0;
-let startTime, endTime;
+let currentPuzzleIndex = 0;
+let startTime;
 
-// Load CSV data
-function loadPuzzles() {
+function initializeGame() {
     fetch('Data.csv')
         .then(response => response.text())
         .then(data => {
-            const lines = data.split('\n');
-            lines.shift(); // Remove header
+            let lines = data.split('\n');
+            lines.shift(); // Remove headers
             lines.forEach(line => {
-                const [clue, word1, word2] = line.split(',');
-                puzzles.push({ clue, word1, word2 });
+                let parts = line.split(',');
+                puzzles.push({ clue: parts[0], word1: parts[1], word2: parts[2] });
             });
-
-            // Calculate Puzzle ID
-            const startDate = new Date('2023-07-30');
-            const currentDate = new Date();
-            const timeDiff = currentDate - startDate;
-            const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            currentPuzzleId = daysDiff % puzzles.length;
-
-            // Display clue
-            document.getElementById('clue').textContent = "Clue: " + puzzles[currentPuzzleId].clue;
-
-            // Start timer
-            startTime = new Date();
+            loadPuzzle();
         });
 }
 
-// Popups
-document.getElementById('dismissButton').addEventListener('click', function() {
+function loadPuzzle() {
+    // Calculate Puzzle ID based on days since 30-Jul-2023
+    let startDate = new Date('30-Jul-2023');
+    let currentDate = new Date();
+    let timeDiff = currentDate - startDate;
+    let daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    currentPuzzleIndex = daysDiff % puzzles.length;
+
+    document.getElementById('clue').textContent = "Clue: " + puzzles[currentPuzzleIndex].clue;
+
+    // Start timer
+    startTime = new Date().getTime();
+}
+
+function submitGuess() {
+    let guess = document.getElementById('guess').value.toLowerCase();
+    let correctAnswer = puzzles[currentPuzzleIndex].word1.toLowerCase() + " " + puzzles[currentPuzzleIndex].word2.toLowerCase();
+    
+    if (guess === correctAnswer) {
+        let endTime = new Date().getTime();
+        let timeTaken = Math.floor((endTime - startTime) / 1000);
+        alert('Correct! It took you ' + timeTaken + ' seconds.');
+        document.getElementById('shareButton').style.display = 'block';
+    } else {
+        alert('Try again!');
+    }
+}
+
+function shareResult() {
+    let endTime = new Date().getTime();
+    let timeTaken = Math.floor((endTime - startTime) / 1000);
+    let shareText = `I solved Needles to Say puzzle no. ${currentPuzzleIndex + 1} in ${timeTaken} sec.`;
+    navigator.clipboard.writeText(shareText);
+    alert('Result copied to clipboard!');
+}
+
+function showFeedback() {
+    document.getElementById('feedbackTab').style.display = 'block';
+}
+
+function dismissFeedback() {
+    document.getElementById('feedbackTab').style.display = 'none';
+}
+
+function showAbout() {
+    document.getElementById('aboutTab').style.display = 'block';
+}
+
+function dismissAbout() {
+    document.getElementById('aboutTab').style.display = 'none';
+}
+
+function dismissSplash() {
     document.getElementById('splashScreen').style.display = 'none';
-});
+}
 
-document.getElementById('feedbackTab').addEventListener('click', function() {
-    document.getElementById('feedbackPopup').style.display = 'flex';
-});
-
-document.getElementById('aboutTab').addEventListener('click', function() {
-    document.getElementById('aboutPopup').style.display = 'flex';
-});
-
-document.getElementById('sendFeedback').addEventListener('click', function() {
-    // Placeholder for sending feedback. In a real-world scenario, this would send the feedback to a server or email.
-    console.log('Feedback:', document.getElementById('feedbackText').value);
-    document.getElementById('feedbackPopup').style.display = 'none';
-});
-
-// Initialize game
-window.onload = function() {
-    loadPuzzles();
-    document.getElementById('splashScreen').style.display = 'flex';
-};
