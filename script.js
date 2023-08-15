@@ -1,80 +1,66 @@
-let betaTesting = false;
-let startTime;
-let endTime;
-let currentPuzzle;
+let puzzles = [];
+let currentPuzzle = null;
+let startTime = null;
 
-function initializeGame() {
-    if (betaTesting) {
-        document.getElementById('betaTestUI').style.display = 'block';
-    }
-    loadPuzzle();
-}
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Document loaded");
 
-function startGame() {
-    document.getElementById('splashScreen').style.display = 'none';
-    document.getElementById('gameUI').style.display = 'block';
-    startTime = Date.now();
-}
-
-function loadPuzzle(id) {
+    // Load CSV data
     fetch('data.csv')
         .then(response => response.text())
         .then(data => {
-            let lines = data.split('\n');
-            if (!id) {
-                let currentDate = new Date();
-                let startDate = new Date('2023-07-30');
-                id = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
-            }
-            let puzzleIndex = (id - 1) % (lines.length - 1);
-            let puzzleData = lines[puzzleIndex + 1].split(',');
-            currentPuzzle = {
-                clue: puzzleData[0],
-                word1: puzzleData[1],
-                word2: puzzleData[2]
-            };
-            document.getElementById('dailyChallengeClue').textContent = currentPuzzle.clue;
-        });
+            let rows = data.split('\n').slice(1);
+            rows.forEach(row => {
+                let [clue, word1, word2] = row.split(',');
+                puzzles.push({clue, word1, word2});
+            });
+            loadDailyPuzzle();
+        })
+        .catch(err => console.log("Error loading CSV:", err));
+
+    // Event listeners
+    document.getElementById('submitGuess').addEventListener('click', checkGuess);
+    document.getElementById('loadPuzzle').addEventListener('click', loadBetaPuzzle);
+    document.getElementById('copyToClipboard').addEventListener('click', copyShareText);
+});
+
+function loadDailyPuzzle() {
+    let date = new Date();
+    let referenceDate = new Date("2023-07-30");
+    let daysDiff = Math.floor((date - referenceDate) / (1000 * 60 * 60 * 24));
+    let puzzleIndex = daysDiff % puzzles.length;
+    currentPuzzle = puzzles[puzzleIndex];
+    document.getElementById('clue').textContent = currentPuzzle.clue;
+    startTime = Date.now();
 }
 
-function submitGuess() {
-    let guess = document.getElementById('guessInput').value.toLowerCase().trim();
-    if (guess === currentPuzzle.word1.toLowerCase() + ' ' + currentPuzzle.word2.toLowerCase()) {
-        endTime = Date.now();
-        let timeTaken = Math.round((endTime - startTime) / 1000);
-        document.getElementById('gameFeedback').textContent = 'Correct! Well done.';
+function checkGuess() {
+    let guess = document.getElementById('guessInput').value.toLowerCase();
+    let answer = `${currentPuzzle.word1.toLowerCase()} ${currentPuzzle.word2.toLowerCase()}`;
+    if (guess === answer) {
+        let timeTaken = Math.floor((Date.now() - startTime) / 1000);
+        document.getElementById('feedbackMessage').textContent = `Correct! Time taken: ${timeTaken} seconds.`;
+        let shareText = `Needles to Say ${currentPuzzle.clue} ${timeTaken}`;
+        document.getElementById('shareText').value = shareText;
         document.getElementById('socialSharing').style.display = 'block';
-        document.getElementById('puzzleID').textContent = currentPuzzle.clue;
-        document.getElementById('timeTaken').textContent = timeTaken;
     } else {
-        document.getElementById('gameFeedback').textContent = 'Try again!';
+        document.getElementById('feedbackMessage').textContent = "Incorrect, try again!";
     }
 }
 
-function checkInput(event) {
-    if (event.keyCode === 13) {
-        submitGuess();
+function loadBetaPuzzle() {
+    let puzzleNumber = parseInt(document.getElementById('puzzleNumber').value);
+    if (puzzleNumber >= 0 && puzzleNumber < puzzles.length) {
+        currentPuzzle = puzzles[puzzleNumber];
+        document.getElementById('clue').textContent = currentPuzzle.clue;
+        startTime = Date.now();
+    } else {
+        document.getElementById('feedbackMessage').textContent = "Invalid puzzle number!";
     }
 }
 
-function loadCustomPuzzle() {
-    let id = parseInt(document.getElementById('puzzleNumberInput').value);
-    loadPuzzle(id);
-}
-
-function sendFeedback() {
-    let feedback = document.getElementById('feedbackText').value;
-    alert(`Thank you for your feedback! We would send this to email@example.com:\n\n${feedback}`);
-}
-
-function copyToClipboard() {
-    let text = `Needles to Say ${document.getElementById('puzzleID').textContent} in ${document.getElementById('timeTaken').textContent} seconds`;
-    let tempInput = document.createElement('textarea');
-    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
-    tempInput.value = text;
-    document.body.appendChild(tempInput);
-    tempInput.select();
+function copyShareText() {
+    let shareText = document.getElementById('shareText');
+    shareText.select();
     document.execCommand('copy');
-    document.body.removeChild(tempInput);
-    alert("Copied to clipboard!");
 }
