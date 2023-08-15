@@ -1,43 +1,55 @@
-body {
-    font-family: 'Arial', sans-serif;
-    text-align: center;
-    background-color: #fafafa;
+let puzzles = [];
+let currentPuzzleId = 0;
+let startTime, endTime;
+
+// Load CSV data
+function loadPuzzles() {
+    fetch('Data.csv')
+        .then(response => response.text())
+        .then(data => {
+            const lines = data.split('\n');
+            lines.shift(); // Remove header
+            lines.forEach(line => {
+                const [clue, word1, word2] = line.split(',');
+                puzzles.push({ clue, word1, word2 });
+            });
+
+            // Calculate Puzzle ID
+            const startDate = new Date('2023-07-30');
+            const currentDate = new Date();
+            const timeDiff = currentDate - startDate;
+            const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            currentPuzzleId = daysDiff % puzzles.length;
+
+            // Display clue
+            document.getElementById('clue').textContent = "Clue: " + puzzles[currentPuzzleId].clue;
+
+            // Start timer
+            startTime = new Date();
+        });
 }
 
-.splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+// Popups
+document.getElementById('dismissButton').addEventListener('click', function() {
+    document.getElementById('splashScreen').style.display = 'none';
+});
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+document.getElementById('feedbackTab').addEventListener('click', function() {
+    document.getElementById('feedbackPopup').style.display = 'flex';
+});
 
-button:hover {
-    background-color: #45a049;
-}
+document.getElementById('aboutTab').addEventListener('click', function() {
+    document.getElementById('aboutPopup').style.display = 'flex';
+});
 
-input {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
-}
+document.getElementById('sendFeedback').addEventListener('click', function() {
+    // Placeholder for sending feedback. In a real-world scenario, this would send the feedback to a server or email.
+    console.log('Feedback:', document.getElementById('feedbackText').value);
+    document.getElementById('feedbackPopup').style.display = 'none';
+});
 
-.betaPuzzleId {
-    display: none;
-}
+// Initialize game
+window.onload = function() {
+    loadPuzzles();
+    document.getElementById('splashScreen').style.display = 'flex';
+};
