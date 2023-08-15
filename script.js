@@ -1,4 +1,3 @@
-
 let puzzles = [];
 let currentPuzzle = null;
 let startTime;
@@ -36,7 +35,7 @@ function submitGuess() {
     if (word1Guess === currentPuzzle.word1.toLowerCase() && word2Guess === currentPuzzle.word2.toLowerCase()) {
         const endTime = new Date();
         const timeTaken = Math.floor((endTime - startTime) / 1000);
-        alert(\`Correct! It took you \${timeTaken} seconds.\`);
+        alert(`Correct! It took you ${timeTaken} seconds.`);
     } else {
         alert("Try again!");
     }
@@ -45,7 +44,7 @@ function submitGuess() {
 function copyToClipboard() {
     const dateDiff = Math.floor((new Date() - new Date("2023-07-30")) / (1000 * 60 * 60 * 24));
     const timeTaken = Math.floor((new Date() - startTime) / 1000);
-    const text = \`I solved Needles to Say puzzle no. \${dateDiff} in \${timeTaken} sec.\`;
+    const text = `I solved Needles to Say puzzle no. ${dateDiff} in ${timeTaken} sec.`;
     navigator.clipboard.writeText(text);
     alert("Text copied to clipboard!");
 }
@@ -59,7 +58,7 @@ function showAbout() {
 }
 
 function showFeedback() {
-    window.open(\`mailto:email@example.com?subject=Feedback for Needles to Say&body=Your feedback here...\`);
+    window.open(`mailto:email@example.com?subject=Feedback for Needles to Say&body=Your feedback here...`);
 }
 
 function loadBetaPuzzle() {
