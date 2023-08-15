@@ -32,4 +32,29 @@ function submitGuess() {
     if (guess === currentPuzzle.word1.toLowerCase() + " " + currentPuzzle.word2.toLowerCase()) {
         endTime = new Date();
         const timeTaken = Math.round((endTime - startTime) / 1000);
-        alert(`Correct! You solved the puzzle in ${timeTaken}
+        alert(`Correct! You solved the puzzle in ${timeTaken} seconds.`);
+    } else {
+        alert('Incorrect. Try again!');
+    }
+}
+
+function shareResult() {
+    const timeTaken = Math.round((endTime - startTime) / 1000);
+    const puzzleId = puzzles.indexOf(currentPuzzle) + 1;
+    const shareText = `I solved Needles to Say puzzle no. ${puzzleId} in ${timeTaken} sec.`;
+    navigator.clipboard.writeText(shareText);
+    alert('Result copied to clipboard!');
+}
+
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+}
+
+function dismissModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+function sendFeedback() {
+    // Placeholder for sending feedback
+    alert('Feedback sent to email@example.com!');
+}
