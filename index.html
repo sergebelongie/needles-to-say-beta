@@ -1,64 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Needles to Say</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
-
 <body>
-    <!-- Navigation Bar -->
-    <nav>
-        <button onclick="showPage('splash-screen')">Home</button>
-        <button onclick="showPage('daily-challenge')">Play</button>
-        <button onclick="showPage('feedback-tab')">Feedback</button>
-        <button onclick="showPage('about-tab')">About</button>
-    </nav>
-
     <!-- Splash Screen -->
-    <div id="splash-screen" class="page">
-        <h1>Welcome to "Needles to Say"!</h1>
-        <p>Guess the word pair where the second word is obtained by dropping the last letter of the first word!</p>
+    <div id="splashScreen">
+        <h1>Welcome to Needles to Say!</h1>
+        <p>Guess a word pair based on the clue provided. The second word is just the first word without its last letter!</p>
+        <button id="startGameBtn">Start Game</button>
+    </div>
+
+    <!-- Main Game UI -->
+    <div id="gameUI" hidden>
+        <h2 id="dailyChallengeTitle">Daily Challenge</h2>
+        <p id="dailyChallengeClue"></p>
+        <input type="text" id="guessInput" placeholder="Your Guess">
+        <button id="submitGuessBtn">Submit</button>
+        <div id="betaTestUI" hidden>
+            <input type="number" id="puzzleNumberInput" placeholder="Puzzle Number">
+            <button id="loadPuzzleBtn">Load Puzzle</button>
+        </div>
+        <p id="gameFeedback"></p>
     </div>
 
     <!-- Feedback Tab -->
-    <div id="feedback-tab" class="page">
+    <div id="feedbackTab">
         <h2>Feedback</h2>
-        <textarea placeholder="Send your feedback..."></textarea>
-        <button>Submit</button>
-        <p>Email: email@example.com</p>
+        <textarea placeholder="Your feedback..."></textarea>
+        <button>Send Feedback to email@example.com</button>
     </div>
 
     <!-- About Tab -->
-    <div id="about-tab" class="page">
+    <div id="aboutTab" hidden>
         <h2>About</h2>
-        <p>Lorem ipsum... [placeholder text]</p>
+        <p>Lorem ipsum...</p>
     </div>
 
-    <!-- Daily Challenge -->
-    <div id="daily-challenge" class="page">
-        <h2>Daily Challenge</h2>
-        <p>Clue: <span id="daily-clue"></span></p>
-        <input type="text" id="guess-input" placeholder="Your guess...">
-        <button onclick="checkGuess()">Submit</button>
+    <!-- Social Sharing -->
+    <div id="socialSharing" hidden>
+        <p>Share your score: Needles to Say <span id="puzzleID"></span> <span id="timeTaken"></span></p>
+        <button>Copy to Clipboard</button>
     </div>
-
-    <!-- Beta Testing Input -->
-    <div id="beta-testing" class="page">
-        <h2>Beta Testing</h2>
-        <input type="number" id="puzzle-number-input" placeholder="Enter puzzle number...">
-        <button onclick="loadPuzzleByNumber()">Submit</button>
-    </div>
-
-    <!-- Social Sharing Component -->
-    <div id="social-sharing" style="display: none;">
-        <p>Needles to Say <span id="puzzle-id"></span> <span id="time-taken"></span></p>
-        <button onclick="copyToClipboard()">Copy to Clipboard</button>
-    </div>
-
-    <script src="script.js"></script>
 </body>
-
 </html>
