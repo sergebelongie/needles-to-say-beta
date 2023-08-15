@@ -6,46 +6,42 @@
     <title>Needles to Say</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="initializeGame()">
+<body>
     <!-- Splash Screen -->
-    <div id="splashScreen">
-        <h1>Welcome to Needles to Say!</h1>
-        <p>Guess a word pair based on the clue provided. The second word is just the first word without its last letter!</p>
-        <button onclick="startGame()">Start Game</button>
-    </div>
-
-    <!-- Main Game UI -->
-    <div id="gameUI" hidden>
-        <h2 id="dailyChallengeTitle">Daily Challenge</h2>
-        <p id="dailyChallengeClue"></p>
-        <input type="text" id="guessInput" placeholder="Your Guess" onkeyup="checkInput(event)">
-        <button onclick="submitGuess()">Submit</button>
-        <div id="betaTestUI" hidden>
-            <input type="number" id="puzzleNumberInput" placeholder="Puzzle Number">
-            <button onclick="loadCustomPuzzle()">Load Puzzle</button>
+    <div id="splash-screen" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>Welcome to "Needles to Say"!</p>
+            <p>Guess the word pair based on the clue provided. The second word is obtained by dropping the last letter of the first word. Good luck!</p>
         </div>
-        <p id="gameFeedback"></p>
     </div>
 
-    <!-- Feedback Tab -->
-    <div id="feedbackTab">
-        <h2>Feedback</h2>
-        <textarea id="feedbackText" placeholder="Your feedback..."></textarea>
-        <button onclick="sendFeedback()">Send Feedback</button>
-    </div>
+    <!-- Game Area -->
+    <div id="game-area">
+        <!-- Clue Display -->
+        <div id="clue-display">Loading...</div>
 
-    <!-- About Tab -->
-    <div id="aboutTab">
-        <h2>About</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquam orci non orci vehicula, at venenatis lorem dictum.</p>
+        <!-- Guess Input -->
+        <input type="text" id="guess-input" placeholder="Enter your guess...">
+        <button id="submit-guess">Submit</button>
+
+        <!-- Puzzle number box (for beta testing) -->
+        <input type="number" id="puzzle-number" placeholder="Puzzle number...">
     </div>
 
     <!-- Social Sharing -->
-    <div id="socialSharing" hidden>
-        <p>Share your score: Needles to Say <span id="puzzleID"></span> in <span id="timeTaken"></span> seconds</p>
-        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <div id="social-sharing">
+        <button id="share-twitter">Share on Twitter</button>
+        <button id="share-facebook">Share on Facebook</button>
     </div>
 
+    <!-- Feedback & About Tabs -->
+    <div id="tabs">
+        <button id="feedback-tab">Feedback</button>
+        <button id="about-tab">About</button>
+    </div>
+
+    <!-- External JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
