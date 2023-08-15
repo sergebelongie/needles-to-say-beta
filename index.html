@@ -1,24 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Needles to Say Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Needles to Say</title>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Needles to Say</h1>
-        <p>Try to guess the word pair based on the clue.</p>
-        <div id="gameArea">
-            <p>Select a puzzle:</p>
-            <select id="puzzleSelect"></select>
-            <p id="clue"></p>
-            <input type="text" id="guessInput" placeholder="Your guess">
-            <button id="submitBtn">Submit</button>
-            <p id="result"></p>
-        </div>
+    <!-- Navigation Bar -->
+    <nav>
+        <button onclick="showPage('splash-screen')">Home</button>
+        <button onclick="showPage('daily-challenge')">Play</button>
+        <button onclick="showPage('feedback-tab')">Feedback</button>
+        <button onclick="showPage('about-tab')">About</button>
+    </nav>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="page">
+        <h1>Welcome to "Needles to Say"!</h1>
+        <p>Rules: [Provide rules here]</p>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <!-- Feedback Tab -->
+    <div id="feedback-tab" class="page">
+        <h2>Feedback</h2>
+        <textarea placeholder="Send your feedback..."></textarea>
+        <button>Submit</button>
+        <p>Email: email@example.com</p>
+    </div>
+
+    <!-- About Tab -->
+    <div id="about-tab" class="page">
+        <h2>About</h2>
+        <p>Lorem ipsum... [placeholder text]</p>
+    </div>
+
+    <!-- Daily Challenge -->
+    <div id="daily-challenge" class="page">
+        <h2>Daily Challenge</h2>
+        <input type="text" placeholder="Your guess...">
+        <button>Submit</button>
+    </div>
+
+    <!-- Beta Testing Input -->
+    <div id="beta-testing" class="page">
+        <h2>Beta Testing</h2>
+        <input type="number" placeholder="Enter puzzle number...">
+        <button>Submit</button>
+    </div>
+
+    <!-- Social Sharing Component -->
+    <div id="social-sharing" style="display: none;">
+        <p>Needles to Say XXX YYY</p>
+        <button>Copy to Clipboard</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
+
 </html>
