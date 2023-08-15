@@ -6,42 +6,47 @@
     <title>Needles to Say (beta)</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="initializeGame()">
-    <!-- Splash Screen -->
-    <div id="splashScreen" class="modal">
+<body>
+    <!-- Splash Screen Modal -->
+    <div id="splashModal" class="modal">
         <div class="modal-content">
-            <p>Welcome to "Needles to Say"! Guess a pair of words based on the clue, where the second word is obtained by dropping the last letter of the first word.</p>
-            <button onclick="dismissSplash()">Dismiss</button>
+            <h2>Welcome to Needles to Say!</h2>
+            <p>Objective: Guess a pair of words based on the clue provided. The second word is obtained by dropping the last letter of the first word.</p>
+            <button onclick="dismissModal('splashModal')">Dismiss</button>
         </div>
     </div>
 
-    <!-- Feedback Tab -->
-    <div id="feedbackTab" class="modal">
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <p>Send your feedback to: <a href="mailto:email@example.com">email@example.com</a></p>
-            <button onclick="dismissFeedback()">Dismiss</button>
+            <h2>Feedback</h2>
+            <textarea placeholder="Your feedback here..."></textarea>
+            <button onclick="sendFeedback()">Send</button>
         </div>
     </div>
 
-    <!-- About Tab -->
-    <div id="aboutTab" class="modal">
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
         <div class="modal-content">
-            <p>Lorem ipsum...</p>
-            <button onclick="dismissAbout()">Dismiss</button>
+            <h2>About</h2>
+            <p>Lorem ipsum ...</p>
+            <button onclick="dismissModal('aboutModal')">Dismiss</button>
         </div>
     </div>
 
     <header>
-        <h1>Needles to Say (beta)</h1>
-        <button onclick="showFeedback()">Feedback</button>
-        <button onclick="showAbout()">About</button>
+        <h1>Needles to Say</h1>
+        <nav>
+            <button onclick="openModal('feedbackModal')">Feedback</button>
+            <button onclick="openModal('aboutModal')">About</button>
+        </nav>
     </header>
 
     <main>
-        <p id="clue">Clue: Loading...</p>
-        <input type="text" id="guess" placeholder="Enter your guess">
+        <p id="clue">Clue: ...</p>
+        <input type="text" id="guess" placeholder="Your guess here...">
         <button onclick="submitGuess()">Submit</button>
-        <button id="shareButton" onclick="shareResult()">Share</button>
+        <button id="shareBtn" onclick="shareResult()">Share</button>
     </main>
 
     <script src="script.js"></script>
