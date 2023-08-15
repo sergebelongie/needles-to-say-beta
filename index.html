@@ -3,82 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Needles to Say</title>
+    <title>Needles to Say (beta)</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Splash Screen -->
-<div id="splashScreen" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Welcome to "Needles to Say"!</h2>
-        <p>
-            Guess a word pair in which the second word is obtained by taking the first word and dropping the last letter. Both words must be in common use in English. The clues have the style of crossword puzzle clues.
-        </p>
-        <button id="dismissSplash">Dismiss</button>
-    </div>
-</div>
-
-    <!-- Main Game Content -->
-    <div id="gameContent">
-        <h1>Needles to Say</h1>
-        <p id="clue">Loading...</p>
-        <input type="text" id="guessInput" placeholder="Enter your guess...">
-        <button id="submitGuess">Submit</button>
-        <p id="feedbackMessage"></p>
-    </div>
-
-    <!-- Feedback & About Tabs -->
-    <div id="tabs">
-        <button id="feedbackBtn">Feedback</button>
-        <button id="aboutBtn">About</button>
+    <div id="splashScreen" class="modal">
+        <div class="modal-content">
+            <p>Welcome to Needles to Say!</p>
+            <p>The aim of the game is to guess the word pair based on the given clue. The second word is obtained by taking the first word and dropping its last letter.</p>
+            <button id="dismissButton">Dismiss</button>
+        </div>
     </div>
     
     <!-- Feedback Modal -->
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Feedback</h2>
-            <p>
-                Have a suggestion or found a bug? Send us an email at <a href="mailto:email@example.com">email@example.com</a>
-            </p>
+            <p>Send us your feedback:</p>
+            <textarea id="feedbackText" rows="4" placeholder="Enter your feedback..."></textarea>
+            <button id="sendFeedback">Send</button>
         </div>
     </div>
 
     <!-- About Modal -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>About</h2>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.
-            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <button id="closeAbout">Close</button>
         </div>
     </div>
-
-    <!-- Daily Challenge Section -->
-    <div id="dailyChallenge">
-        <h2>Daily Challenge</h2>
-        <p>Guess today's word pair!</p>
+    
+    <!-- Main Content -->
+    <div id="mainContent">
+        <h1>Needles to Say (beta)</h1>
+        <p id="clueText">Clue: </p>
+        <input type="text" id="guessInput" placeholder="Enter your guess...">
+        <button id="submitButton">Submit</button>
+        <button id="feedbackButton">Feedback</button>
+        <button id="aboutButton">About</button>
     </div>
 
-    <!-- Beta Testing Section (hidden by default) -->
-    <div id="betaTesting" style="display: none;">
-        <h2>Beta Testing Mode</h2>
-        <p>Enter a puzzle number:</p>
-        <input type="text" id="puzzleNumber" placeholder="Puzzle number...">
+    <!-- Social Share -->
+    <div id="socialShare">
+        <p>I solved Needles to Say puzzle no. <span id="puzzleID"></span> in <span id="timeTaken"></span> sec.</p>
+    </div>
+
+    <!-- Beta Testing Input -->
+    <div id="betaInput">
+        <input type="text" id="betaPuzzleID" placeholder="Enter Puzzle ID...">
         <button id="loadPuzzle">Load Puzzle</button>
     </div>
 
-    <!-- Social Sharing Section -->
-    <div id="socialSharing" style="display: none;">
-        <h2>Congratulations!</h2>
-        <p>Share your achievement:</p>
-        <textarea id="shareText" readonly></textarea>
-        <button id="copyToClipboard">Copy</button>
-    </div>
-
-    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>
