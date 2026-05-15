@@ -21,7 +21,7 @@ const PUZZLE_DATA = {
   "2026-05-24": { hint: "A fleeting wheel of French cheese", a: "OEVRS" },
   "2026-05-25": { hint: "House covering for an Aussie marsupial", a: "EBBS" },
   "2026-05-26": { hint: "Practice boxing at a health resort", a: "FCNE" },
-  "2026-05-27": { hint: "A pleasantly chubby purple fruit", a: "CYHZP" },
+  "2026-05-27": { hint: "A pleasantly chubby purple fruit", a: "CYHZC" },
   "2026-05-28": { hint: "A light baseball tap to advance a hot dog roll", a: "OHAG" },
   "2026-05-29": { hint: "A brewed drink for a pollinator", a: "ORRE" },
   "2026-05-30": { hint: "A pedestal for an overzealous fan", a: "FGNAQ" },
