@@ -1,54 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Needles to Say (beta)</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Splash Screen Modal -->
-    <div id="splashModal" class="modal">
-        <div class="modal-content">
-            <h2>Welcome to Needles to Say!</h2>
-            <p>Objective: Guess a pair of words based on the clue provided. The second word is obtained by dropping the last letter of the first word.</p>
-            <button onclick="dismissModal('splashModal')">Dismiss</button>
-        </div>
-    </div>
-
-    <!-- Feedback Modal -->
-    <div id="feedbackModal" class="modal">
-        <div class="modal-content">
-            <h2>Feedback</h2>
-            <textarea placeholder="Your feedback here..."></textarea>
-            <button onclick="sendFeedback()">Send</button>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <h2>About</h2>
-            <p>Lorem ipsum ...</p>
-            <button onclick="dismissModal('aboutModal')">Dismiss</button>
-        </div>
-    </div>
-
-    <header>
-        <h1>Needles to Say</h1>
-        <nav>
-            <button onclick="openModal('feedbackModal')">Feedback</button>
-            <button onclick="openModal('aboutModal')">About</button>
-        </nav>
-    </header>
-
-    <main>
-        <p id="clue">Clue: ...</p>
-        <input type="text" id="guess" placeholder="Your guess here...">
-        <button onclick="submitGuess()">Submit</button>
-        <button id="shareBtn" onclick="shareResult()">Share</button>
-    </main>
-
-    <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>needles-to-say-beta</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
